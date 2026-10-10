@@ -1,0 +1,11 @@
+# Vendored upstream clone (huge, re-clonable; changes captured in patches/)
+spikes/vendor/veloren/
+
+# Build artifacts / generated wasm
+target/
+**/target/
+**/pkg/
+
+# iced vendored dep build output
+spikes/vendor/iced/target/
+.omo/run-continuation/

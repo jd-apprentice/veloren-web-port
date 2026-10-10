@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PoC-1: wgpu WebGPU triangle (wasm)</title>
+  <style>
+    body { margin: 0; background: #101014; color: #ddd; font: 14px system-ui, sans-serif; }
+    canvas { display: block; margin: 16px auto; border: 1px solid #333; image-rendering: pixelated; }
+    .hint { text-align: center; opacity: .7; }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="640" height="480"></canvas>
+  <p class="hint">PoC-1 — si ves un triángulo de colores, el backend WebGPU de wgpu funciona en wasm.</p>
+  <script type="module">
+    document.title = 'MODULE_RAN';
+    import init from './pkg/poc1_wgpu_triangle.js';
+    try {
+      await init();
+      document.title = 'INIT_DONE';
+    } catch (e) {
+      document.title = 'INIT_ERROR';
+      document.querySelector('.hint').textContent = 'ERROR: ' + e;
+      throw e;
+    }
+  </script>
+</body>
+</html>

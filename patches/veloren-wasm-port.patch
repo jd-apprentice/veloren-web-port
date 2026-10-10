@@ -1,0 +1,4958 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index c4a227a..8cb15cd 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -304,6 +304,18 @@ dependencies = [
+  "x11rb 0.13.2",
+ ]
+ 
++[[package]]
++name = "argon2"
++version = "0.5.3"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "3c3610892ee6e0cbce8ae2700349fcf8f98adb0dbfbee85aec3c9179d29cc072"
++dependencies = [
++ "base64ct",
++ "blake2",
++ "cpufeatures 0.2.17",
++ "password-hash",
++]
++
+ [[package]]
+ name = "arr_macro"
+ version = "0.2.1"
+@@ -606,6 +618,12 @@ version = "0.22.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
+ 
++[[package]]
++name = "base64ct"
++version = "1.8.3"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "2af50177e190e07a26ab74f8b1efbfe2ef87da2116221318cb1c2e82baf7de06"
++
+ [[package]]
+ name = "bincode"
+ version = "2.0.1"
+@@ -692,6 +710,15 @@ dependencies = [
+  "wyz",
+ ]
+ 
++[[package]]
++name = "blake2"
++version = "0.10.6"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "46502ad458c9a52b69d4d4d32775c788b7a1b85e8bc9d482d92250fc0e3f8efe"
++dependencies = [
++ "digest 0.10.7",
++]
++
+ [[package]]
+ name = "blake2b_simd"
+ version = "1.0.4"
+@@ -1969,6 +1996,7 @@ checksum = "9ed9a281f7bc9b7576e61468ba615a66a5c8cfdff42420a70aa82701a3b1e292"
+ dependencies = [
+  "block-buffer 0.10.4",
+  "crypto-common 0.1.7",
++ "subtle",
+ ]
+ 
+ [[package]]
+@@ -2882,11 +2910,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "0de51e6874e94e7bf76d726fc5d13ba782deca734ff60d5bb2fb2607c7406555"
+ dependencies = [
+  "cfg-if 1.0.4",
++ "js-sys",
+  "libc",
+  "r-efi 6.0.0",
+  "rand_core 0.10.1",
+  "wasip2",
+  "wasip3",
++ "wasm-bindgen",
+ ]
+ 
+ [[package]]
+@@ -2963,6 +2993,52 @@ dependencies = [
+  "mint",
+ ]
+ 
++[[package]]
++name = "gloo-net"
++version = "0.6.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "c06f627b1a58ca3d42b45d6104bf1e1a03799df472df00988b6ba21accc10580"
++dependencies = [
++ "futures-channel",
++ "futures-core",
++ "futures-sink",
++ "gloo-utils",
++ "http",
++ "js-sys",
++ "pin-project",
++ "serde",
++ "serde_json",
++ "thiserror 1.0.69",
++ "wasm-bindgen",
++ "wasm-bindgen-futures",
++ "web-sys",
++]
++
++[[package]]
++name = "gloo-timers"
++version = "0.3.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "bbb143cf96099802033e0d4f4963b19fd2e0b728bcf076cd9cf7f6634f092994"
++dependencies = [
++ "futures-channel",
++ "futures-core",
++ "js-sys",
++ "wasm-bindgen",
++]
++
++[[package]]
++name = "gloo-utils"
++version = "0.2.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "0b5555354113b18c547c1d3a98fbf7fb32a9ff4f6fa112ce823a21641a0ba3aa"
++dependencies = [
++ "js-sys",
++ "serde",
++ "serde_json",
++ "wasm-bindgen",
++ "web-sys",
++]
++
+ [[package]]
+ name = "glow"
+ version = "0.16.0"
+@@ -5447,6 +5523,17 @@ dependencies = [
+  "windows-link 0.2.1",
+ ]
+ 
++[[package]]
++name = "password-hash"
++version = "0.5.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "346f04948ba92c43e8469c1ee6736c7563d71012b17d40745260fe106aac2166"
++dependencies = [
++ "base64ct",
++ "rand_core 0.6.4",
++ "subtle",
++]
++
+ [[package]]
+ name = "paste"
+ version = "1.0.15"
+@@ -8548,11 +8635,17 @@ dependencies = [
+ name = "veloren-client"
+ version = "0.18.0"
+ dependencies = [
++ "argon2",
+  "async-channel",
+  "authc",
+  "byteorder",
+  "clap",
++ "fxhash",
++ "getrandom 0.4.2",
++ "gloo-net",
++ "gloo-timers",
+  "hashbrown 0.17.1",
++ "hex",
+  "hickory-resolver",
+  "image",
+  "num 0.4.3",
+@@ -8562,6 +8655,7 @@ dependencies = [
+  "rustls",
+  "rustyline",
+  "serde",
++ "serde_json",
+  "specs",
+  "tokio",
+  "tracing",
+@@ -8576,6 +8670,7 @@ dependencies = [
+  "veloren-common-systems",
+  "veloren-network",
+  "veloren-voxygen-i18n-helpers",
++ "web-time",
+ ]
+ 
+ [[package]]
+@@ -8645,6 +8740,7 @@ dependencies = [
+  "veloren-common-assets",
+  "veloren-common-base",
+  "veloren-common-i18n",
++ "web-time",
+ ]
+ 
+ [[package]]
+@@ -8655,13 +8751,17 @@ dependencies = [
+  "dot_vox",
+  "hashbrown 0.17.1",
+  "image",
++ "js-sys",
+  "lazy_static",
+  "ron",
+  "serde",
+  "tempfile",
+  "tracing",
+  "walkdir",
++ "wasm-bindgen",
++ "wasm-bindgen-futures",
+  "wavefront",
++ "web-sys",
+ ]
+ 
+ [[package]]
+@@ -8691,6 +8791,7 @@ dependencies = [
+  "specs",
+  "tracing",
+  "veloren-common-base",
++ "web-time",
+ ]
+ 
+ [[package]]
+@@ -8761,6 +8862,7 @@ dependencies = [
+  "veloren-common-net",
+  "wasmtime",
+  "wasmtime-wasi",
++ "web-time",
+ ]
+ 
+ [[package]]
+@@ -8792,8 +8894,11 @@ dependencies = [
+  "clap",
+  "criterion",
+  "crossbeam-channel",
++ "futures-channel",
+  "futures-util",
++ "gloo-timers",
+  "hashbrown 0.17.1",
++ "js-sys",
+  "lazy_static",
+  "lz-fear",
+  "prometheus",
+@@ -8810,6 +8915,10 @@ dependencies = [
+  "tracing",
+  "tracing-subscriber",
+  "veloren-network-protocol",
++ "wasm-bindgen",
++ "wasm-bindgen-futures",
++ "web-sys",
++ "web-time",
+ ]
+ 
+ [[package]]
+@@ -8826,6 +8935,7 @@ dependencies = [
+  "rand 0.10.1",
+  "tokio",
+  "tracing",
++ "web-time",
+ ]
+ 
+ [[package]]
+@@ -8980,6 +9090,7 @@ dependencies = [
+  "chumsky",
+  "clap",
+  "conrod_core",
++ "console_error_panic_hook",
+  "cpal",
+  "criterion",
+  "crossbeam-channel",
+@@ -8994,6 +9105,7 @@ dependencies = [
+  "enum-map",
+  "euc",
+  "gilrs",
++ "gloo-timers",
+  "glyph_brush",
+  "guillotiere",
+  "hashbrown 0.17.1",
+@@ -9042,6 +9154,10 @@ dependencies = [
+  "veloren-voxygen-egui",
+  "veloren-voxygen-i18n-helpers",
+  "veloren-world",
++ "wasm-bindgen",
++ "wasm-bindgen-futures",
++ "web-sys",
++ "web-time",
+  "wgpu",
+  "wgpu-profiler",
+  "window_clipboard",
+diff --git a/client/Cargo.toml b/client/Cargo.toml
+index 69c63f2..f000236 100644
+--- a/client/Cargo.toml
++++ b/client/Cargo.toml
+@@ -35,29 +35,15 @@ common-systems = { package = "veloren-common-systems", path = "../common/systems
+ common-net = { package = "veloren-common-net", path = "../common/net" }
+ network = { package = "veloren-network", path = "../network", features = [
+     "compression",
+-    "quic",
+ ], default-features = false }
+ 
+ byteorder = "1.3.2"
+-tokio = { workspace = true, features = ["rt-multi-thread"] }
+-quinn = { workspace = true, features = ["rustls"] }
+-rustls = { workspace = true }
+-hickory-resolver = { version = "0.26.1", features = [
+-    "system-config",
+-    "tokio",
+-] }
+ image = { workspace = true }
+ num = { workspace = true }
+ tracing = { workspace = true }
+-rayon = { workspace = true }
+-specs = { workspace = true, features = [
+-    "serde",
+-    "storage-event-control",
+-    "derive",
+-] }
+ vek = { workspace = true }
+ hashbrown = { workspace = true }
+-authc = { git = "https://gitlab.com/veloren/auth.git", rev = "ae0e16783a9f9041951296885f082308e155db79" } # xMAC94x/current_master_till_refactored branch
++web-time = "1"
+ 
+ #TODO: put bot in a different crate
+ #bot only
+@@ -72,6 +58,33 @@ rustyline = { version = "18", optional = true }
+ ## logging
+ common-frontend = { package = "veloren-common-frontend", path = "../common/frontend", optional = true }
+ 
++[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
++specs = { workspace = true, features = ["serde", "storage-event-control", "derive"] }
++network = { package = "veloren-network", path = "../network", default-features = false, features = [
++    "quic",
++] }
++tokio = { workspace = true, features = ["rt-multi-thread"] }
++quinn = { workspace = true, features = ["rustls"] }
++rustls = { workspace = true }
++hickory-resolver = { version = "0.26.1", features = [
++    "system-config",
++    "tokio",
++] }
++rayon = { workspace = true }
++authc = { git = "https://gitlab.com/veloren/auth.git", rev = "ae0e16783a9f9041951296885f082308e155db79" } # xMAC94x/current_master_till_refactored branch
++
++[target.'cfg(target_arch = "wasm32")'.dependencies]
++getrandom = { version = "0.4", features = ["wasm_js"] }
++specs = { version = "0.20", default-features = false, features = ["nightly", "storage-event-control", "derive"] }
++gloo-timers = { version = "0.3", features = ["futures"] }
++gloo-net = { version = "0.6", features = ["http"] }
++argon2 = "0.5"
++fxhash = { workspace = true }
++hex = "0.4"
++serde = { workspace = true, features = ["derive"] }
++serde_json = "1"
++tokio = { workspace = true, features = ["macros", "sync", "time", "rt", "io-util"] }
++
+ [dev-dependencies]
+ voxygen-i18n-helpers = { package = "veloren-voxygen-i18n-helpers", path = "../voxygen/i18n-helpers" }
+ client-i18n = { package = "veloren-client-i18n", path = "i18n" }
+diff --git a/client/src/addr.rs b/client/src/addr.rs
+index 9ceff74..27916db 100644
+--- a/client/src/addr.rs
++++ b/client/src/addr.rs
+@@ -1,16 +1,21 @@
++#[cfg(not(target_arch = "wasm32"))]
+ use std::net::SocketAddr;
++#[cfg(not(target_arch = "wasm32"))]
+ use tokio::net::lookup_host;
++#[cfg(not(target_arch = "wasm32"))]
+ use tracing::trace;
+ 
+ #[derive(Clone, Debug)]
+ pub enum ConnectionArgs {
+     ///hostname: `(hostname|ip):[<port>]`
++    #[cfg(not(target_arch = "wasm32"))]
+     Quic {
+         hostname: String,
+         prefer_ipv6: bool,
+         validate_tls: bool,
+     },
+     ///hostname: `(hostname|ip):[<port>]`
++    #[cfg(not(target_arch = "wasm32"))]
+     Tcp {
+         hostname: String,
+         prefer_ipv6: bool,
+@@ -20,6 +25,7 @@ pub enum ConnectionArgs {
+     /// SRV lookups can not contain a port, but will be able to connect to
+     /// configured port automatically. If a connection with a port is given,
+     /// this will gracefully fall back to TCP.
++    #[cfg(not(target_arch = "wasm32"))]
+     Srv {
+         hostname: String,
+         prefer_ipv6: bool,
+@@ -27,8 +33,11 @@ pub enum ConnectionArgs {
+         use_quic: bool,
+     },
+     Mpsc(u64),
++    #[cfg(target_arch = "wasm32")]
++    Ws(String),
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ impl ConnectionArgs {
+     const DEFAULT_PORT: u16 = 14004;
+ }
+@@ -36,6 +45,7 @@ impl ConnectionArgs {
+ /// Parse ip address or resolves hostname.
+ /// Note: If you use an ipv6 address, the number after the last
+ /// colon will be used as the port unless you use [] around the address.
++#[cfg(not(target_arch = "wasm32"))]
+ pub(crate) async fn resolve(
+     address: &str,
+     prefer_ipv6: bool,
+@@ -60,6 +70,7 @@ pub(crate) async fn resolve(
+     }
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ pub(crate) async fn try_connect<F>(
+     network: &network::Network,
+     address: &str,
+@@ -92,6 +103,7 @@ where
+     participant.unwrap_or_else(|| Err(Error::Other("No Ip Addr provided".to_string())))
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ fn sort_ipv6(s: impl Iterator<Item = SocketAddr>, prefer_ipv6: bool) -> Vec<SocketAddr> {
+     let (mut first_addrs, mut second_addrs) =
+         s.partition::<Vec<_>, _>(|a| a.is_ipv6() == prefer_ipv6);
+diff --git a/client/src/auth_wasm.rs b/client/src/auth_wasm.rs
+new file mode 100644
+index 0000000..7f268b0
+--- /dev/null
++++ b/client/src/auth_wasm.rs
+@@ -0,0 +1,61 @@
++use crate::error::Error;
++use argon2::{Algorithm, Argon2, Params, Version};
++use serde::Deserialize;
++
++#[derive(Deserialize)]
++struct SignInResponse {
++    token: Token,
++}
++
++#[derive(Deserialize)]
++struct Token {
++    unique: u64,
++}
++
++fn net_prehash(password: &str) -> String {
++    let salt = fxhash::hash64(password);
++    let params = Params::new(4096, 3, 1, Some(32)).expect("valid argon2 params");
++    let argon = Argon2::new(Algorithm::Argon2i, Version::V0x13, params);
++    let mut out = [0u8; 32];
++    argon
++        .hash_password_into(password.as_bytes(), &salt.to_le_bytes(), &mut out)
++        .expect("argon2 hashing must not fail");
++    hex::encode(out)
++}
++
++thread_local! {
++    static PROXY: std::cell::RefCell<Option<String>> = const { std::cell::RefCell::new(None) };
++}
++
++pub fn set_proxy(base: String) {
++    PROXY.with(|p| *p.borrow_mut() = Some(base));
++}
++
++pub async fn sign_in(username: &str, password: &str) -> Result<String, Error> {
++    let base = PROXY
++        .with(|p| p.borrow().clone())
++        .ok_or_else(|| Error::Other("auth proxy not set".into()))?;
++    let url = format!("{base}/generate_token");
++    let body = serde_json::json!({
++        "username": username,
++        "password": net_prehash(password),
++    });
++    let resp = gloo_net::http::Request::post(&url)
++        .header("content-type", "application/json")
++        .json(&body)
++        .map_err(|e| Error::Other(format!("auth request build: {e}")))?
++        .send()
++        .await
++        .map_err(|e| Error::Other(format!("auth request: {e}")))?;
++    let status = resp.status();
++    let text = resp
++        .text()
++        .await
++        .map_err(|e| Error::Other(format!("auth response: {e}")))?;
++    if !(200..300).contains(&status) {
++        return Err(Error::AuthErr(format!("auth server {status}: {text}")));
++    }
++    let parsed: SignInResponse =
++        serde_json::from_str(&text).map_err(|e| Error::AuthErr(format!("auth json: {e}")))?;
++    Ok(parsed.token.unique.to_string())
++}
+diff --git a/client/src/error.rs b/client/src/error.rs
+index 6cf7742..3e6da6a 100644
+--- a/client/src/error.rs
++++ b/client/src/error.rs
+@@ -1,7 +1,9 @@
++#[cfg(not(target_arch = "wasm32"))]
+ use authc::AuthClientError;
+ use common_net::msg::server::BanInfo;
+ pub use network::{InitProtocolError, NetworkConnectError, NetworkError};
+ use network::{ParticipantError, StreamError};
++#[cfg(not(target_arch = "wasm32"))]
+ use rustls::Error as RustlsError;
+ use specs::error::Error as SpecsError;
+ 
+@@ -16,6 +18,7 @@ pub enum Error {
+     TooManyPlayers,
+     NotOnWhitelist,
+     AuthErr(String),
++    #[cfg(not(target_arch = "wasm32"))]
+     AuthClientError(AuthClientError),
+     AuthServerUrlInvalid(String),
+     AuthServerNotTrusted,
+@@ -26,6 +29,7 @@ pub enum Error {
+     //TODO: InvalidAlias,
+     Other(String),
+     SpecsErr(SpecsError),
++    #[cfg(not(target_arch = "wasm32"))]
+     RustlsErr(RustlsError),
+ }
+ 
+@@ -33,6 +37,7 @@ impl From<SpecsError> for Error {
+     fn from(err: SpecsError) -> Self { Self::SpecsErr(err) }
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ impl From<RustlsError> for Error {
+     fn from(err: RustlsError) -> Self { Self::RustlsErr(err) }
+ }
+@@ -49,6 +54,7 @@ impl From<StreamError> for Error {
+     fn from(err: StreamError) -> Self { Self::StreamErr(err) }
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ impl From<AuthClientError> for Error {
+     fn from(err: AuthClientError) -> Self { Self::AuthClientError(err) }
+ }
+diff --git a/client/src/lib.rs b/client/src/lib.rs
+index 7ba8114..d5f6ee8 100644
+--- a/client/src/lib.rs
++++ b/client/src/lib.rs
+@@ -3,9 +3,15 @@
+ 
+ pub mod addr;
+ pub mod error;
++mod rt;
++#[cfg(target_arch = "wasm32")]
++mod auth_wasm;
++#[cfg(target_arch = "wasm32")]
++pub use auth_wasm::set_proxy as set_auth_proxy;
+ 
+ // Reexports
+ pub use crate::error::Error;
++#[cfg(not(target_arch = "wasm32"))]
+ pub use authc::AuthClientError;
+ pub use common_net::msg::ServerInfo;
+ pub use specs::{
+@@ -74,13 +80,16 @@ use common_state::plugin::PluginMgr;
+ use common_systems::add_local_systems;
+ use comp::BuffKind;
+ use hashbrown::{HashMap, HashSet};
++#[cfg(not(target_arch = "wasm32"))]
+ use hickory_resolver::{
+     Resolver, config::ResolverConfig, net::runtime::TokioRuntimeProvider, proto::rr::RData,
+ };
+ use image::DynamicImage;
+ use network::{ConnectAddr, Network, Participant, Pid, Stream};
+ use num::traits::FloatConst;
++#[cfg(not(target_arch = "wasm32"))]
+ use rayon::prelude::*;
++#[cfg(not(target_arch = "wasm32"))]
+ use rustls::client::danger::ServerCertVerified;
+ use specs::Component;
+ use std::{
+@@ -89,8 +98,10 @@ use std::{
+     mem,
+     path::PathBuf,
+     sync::Arc,
+-    time::{Duration, Instant},
++    time::Duration,
+ };
++use web_time::Instant;
++#[cfg(not(target_arch = "wasm32"))]
+ use tokio::runtime::Runtime;
+ use tracing::{debug, error, trace, warn};
+ use vek::*;
+@@ -291,6 +302,7 @@ pub struct Client {
+     client_type: ClientType,
+     registered: bool,
+     presence: Option<PresenceKind>,
++    #[cfg(not(target_arch = "wasm32"))]
+     runtime: Arc<Runtime>,
+     server_info: ServerInfo,
+     /// Localized server motd and rules
+@@ -371,6 +383,7 @@ pub struct CharacterList {
+     pub loading: bool,
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ async fn connect_quic(
+     network: &Network,
+     hostname: String,
+@@ -455,10 +468,16 @@ async fn connect_quic(
+     .await
+ }
+ 
++/// Yield to the browser event loop on wasm so the main thread stays responsive. No-op native.
++#[cfg(target_arch = "wasm32")]
++async fn yield_now() { gloo_timers::future::TimeoutFuture::new(0).await; }
++#[cfg(not(target_arch = "wasm32"))]
++async fn yield_now() {}
++
+ impl Client {
+     pub async fn new(
+         addr: ConnectionArgs,
+-        runtime: Arc<Runtime>,
++        #[cfg(not(target_arch = "wasm32"))] runtime: Arc<Runtime>,
+         // TODO: refactor to avoid needing to use this out parameter
+         mismatched_server_info: &mut Option<ServerInfo>,
+         username: &str,
+@@ -470,14 +489,19 @@ impl Client {
+         #[cfg_attr(not(feature = "plugins"), expect(unused_variables))] config_dir: PathBuf,
+         client_type: ClientType,
+     ) -> Result<Self, Error> {
++        #[cfg(not(target_arch = "wasm32"))]
+         let _ = rustls::crypto::ring::default_provider().install_default(); // needs to be initialized before usage
+         // Use `usize::MAX` as the output limit: we implicitly trust servers to not send
+         // us too much data (TODO: should we?)
++        #[cfg(not(target_arch = "wasm32"))]
+         let network = Network::new(Pid::new(), &runtime);
++        #[cfg(target_arch = "wasm32")]
++        let network = Network::new(Pid::new());
+ 
+         init_stage_update(ClientInitStage::ConnectionEstablish);
+ 
+         let mut participant = match addr {
++            #[cfg(not(target_arch = "wasm32"))]
+             ConnectionArgs::Srv {
+                 hostname,
+                 prefer_ipv6,
+@@ -607,12 +631,14 @@ impl Client {
+                     }
+                 }
+             },
++            #[cfg(not(target_arch = "wasm32"))]
+             ConnectionArgs::Tcp {
+                 hostname,
+                 prefer_ipv6,
+             } => {
+                 addr::try_connect(&network, &hostname, None, prefer_ipv6, ConnectAddr::Tcp).await?
+             },
++            #[cfg(not(target_arch = "wasm32"))]
+             ConnectionArgs::Quic {
+                 hostname,
+                 prefer_ipv6,
+@@ -625,6 +651,8 @@ impl Client {
+ 
+                 connect_quic(&network, hostname, None, prefer_ipv6, validate_tls).await?
+             },
++            #[cfg(target_arch = "wasm32")]
++            ConnectionArgs::Ws(url) => network.connect(ConnectAddr::Ws(url)).await?,
+             ConnectionArgs::Mpsc(id) => network.connect(ConnectAddr::Mpsc(id)).await?,
+         };
+ 
+@@ -668,7 +696,10 @@ impl Client {
+ 
+         init_stage_update(ClientInitStage::LoadingInitData);
+         // Wait for initial sync
++        #[cfg(not(target_arch = "wasm32"))]
+         let mut ping_interval = tokio::time::interval(Duration::from_secs(1));
++        #[cfg(target_arch = "wasm32")]
++        let mut ping_interval = rt::Interval::new(Duration::from_secs(1));
+         let ServerInit::GameSync {
+             entity_package,
+             time_of_day,
+@@ -695,7 +726,7 @@ impl Client {
+         init_stage_update(ClientInitStage::StartingClient);
+         // Spawn in a blocking thread (leaving the network thread free).  This is mostly
+         // useful for bots.
+-        let mut task = tokio::task::spawn_blocking(move || {
++        let process = async move {
+             let map_size_lg =
+                 common::terrain::MapSizeLg::new(world_map.dimensions_lg).map_err(|_| {
+                     Error::Other(format!(
+@@ -749,6 +780,7 @@ impl Client {
+             state.ecs_mut().insert(material_stats);
+             state.ecs_mut().insert(ability_map);
+             state.ecs_mut().insert(recipe_book);
++            yield_now().await;
+ 
+             let map_size = map_size_lg.chunks();
+             let max_height = world_map.max_height;
+@@ -919,6 +951,7 @@ impl Client {
+                 }
+             }
+             // Generate standard shaded map
++            yield_now().await;
+             map_config.is_shaded = true;
+             map_config.generate(
+                 |pos| {
+@@ -946,6 +979,7 @@ impl Client {
+                 },
+             );
+             // Generate map with topographical lines and stylized colors
++            yield_now().await;
+             map_config.is_contours = true;
+             map_config.is_stylized_topo = true;
+             map_config.generate(
+@@ -973,6 +1007,7 @@ impl Client {
+                         u32::from_le_bytes([r, g, b, a]);
+                 },
+             );
++            yield_now().await;
+             let make_raw = |rgb| -> Result<_, Error> {
+                 let mut raw = vec![0u8; 4 * world_map_rgba.len()];
+                 LittleEndian::write_u32_into(rgb, &mut raw);
+@@ -993,10 +1028,19 @@ impl Client {
+             let world_map_rgb_img = make_raw(&world_map_rgba)?;
+             let world_map_topo_img = make_raw(&world_map_topo)?;
+             let world_map_layers = vec![world_map_rgb_img, world_map_topo_img];
++            #[cfg(not(target_arch = "wasm32"))]
+             let horizons = (west.0, west.1, east.0, east.1)
+                 .into_par_iter()
+                 .map(|(wa, wh, ea, eh)| u32::from_le_bytes([wa, wh, ea, eh]))
+                 .collect::<Vec<_>>();
++            #[cfg(target_arch = "wasm32")]
++            let horizons: Vec<u32> = west
++                .0
++                .iter()
++                .zip(&west.1)
++                .zip(east.0.iter().zip(&east.1))
++                .map(|((wa, wh), (ea, eh))| u32::from_le_bytes([*wa, *wh, *ea, *eh]))
++                .collect();
+             let lod_horizon = horizons;
+             let map_bounds = Vec2::new(sea_level, max_height);
+             debug!("Done preparing image...");
+@@ -1017,7 +1061,13 @@ impl Client {
+                 local_plugins,
+                 role,
+             ))
++        };
++        #[cfg(not(target_arch = "wasm32"))]
++        let mut task = tokio::task::spawn_blocking(move || {
++            tokio::runtime::Handle::current().block_on(process)
+         });
++        #[cfg(target_arch = "wasm32")]
++        let mut task = Box::pin(process);
+ 
+         let (
+             state,
+@@ -1035,10 +1085,16 @@ impl Client {
+             local_plugins,
+             role,
+         ) = loop {
++            #[cfg(not(target_arch = "wasm32"))]
+             tokio::select! {
+                 res = &mut task => break res.expect("Client thread should not panic")?,
+                 _ = ping_interval.tick() => ping_stream.send(PingMsg::Ping)?,
+             }
++            #[cfg(target_arch = "wasm32")]
++            tokio::select! {
++                res = &mut task => break res?,
++                _ = ping_interval.tick() => ping_stream.send(PingMsg::Ping)?,
++            }
+         };
+         let missing_plugins_set = missing_plugins.iter().cloned().collect();
+         if !missing_plugins.is_empty() {
+@@ -1052,6 +1108,7 @@ impl Client {
+             client_type,
+             registered: true,
+             presence: None,
++            #[cfg(not(target_arch = "wasm32"))]
+             runtime,
+             server_info,
+             server_description: description,
+@@ -1146,6 +1203,8 @@ impl Client {
+             Some(addr) => {
+                 // Query whether this is a trusted auth server
+                 if auth_trusted(addr) {
++                    #[cfg(not(target_arch = "wasm32"))]
++                    {
+                     let (scheme, authority) = match addr.split_once("://") {
+                         Some((s, a)) => (s, a),
+                         None => return Err(Error::AuthServerUrlInvalid(addr.to_string())),
+@@ -1165,6 +1224,12 @@ impl Client {
+                         .sign_in(username, password)
+                         .await?
+                         .serialize())
++                    }
++                    #[cfg(target_arch = "wasm32")]
++                    {
++                        let _ = password;
++                        crate::auth_wasm::sign_in(username, password).await
++                    }
+                 } else {
+                     Err(Error::AuthServerNotTrusted)
+                 }
+@@ -3333,6 +3398,7 @@ impl Client {
+     /// used for any computationally expensive operations that run outside
+     /// of the main thread (i.e., threads that block on I/O operations are
+     /// exempt).
++    #[cfg(not(target_arch = "wasm32"))]
+     pub fn runtime(&self) -> &Arc<Runtime> { &self.runtime }
+ 
+     /// Get a reference to the client's game state.
+@@ -3567,6 +3633,7 @@ impl Drop for Client {
+             trace!("no disconnect msg necessary as client wasn't registered")
+         }
+ 
++        #[cfg(not(target_arch = "wasm32"))]
+         tokio::task::block_in_place(|| {
+             if let Err(e) = self
+                 .runtime
+diff --git a/client/src/rt.rs b/client/src/rt.rs
+new file mode 100644
+index 0000000..b97f9c9
+--- /dev/null
++++ b/client/src/rt.rs
+@@ -0,0 +1,18 @@
++#[cfg(target_arch = "wasm32")]
++use std::time::Duration;
++
++#[cfg(target_arch = "wasm32")]
++pub(crate) struct Interval {
++    period: Duration,
++}
++
++#[cfg(target_arch = "wasm32")]
++impl Interval {
++    pub(crate) fn new(period: Duration) -> Self {
++        Self { period }
++    }
++
++    pub(crate) async fn tick(&mut self) {
++        gloo_timers::future::TimeoutFuture::new(self.period.as_millis() as u32).await;
++    }
++}
+diff --git a/common/Cargo.toml b/common/Cargo.toml
+index 870a269..0053bca 100644
+--- a/common/Cargo.toml
++++ b/common/Cargo.toml
+@@ -56,13 +56,13 @@ ron = { workspace = true }
+ roots = "0.0.8"
+ spin_sleep = "1.0"
+ tracing = { workspace = true }
++web-time = "1"
+ uuid = { version = "1.4.1", default-features = false, features = [
+     "serde",
+     "v4",
+ ] }
+ rand = { workspace = true }
+ fxhash = { workspace = true }
+-thread-priority = { workspace = true }
+ 
+ # Assets
+ common-assets = { package = "veloren-common-assets", path = "assets" }
+@@ -84,12 +84,6 @@ slotmap = { workspace = true }
+ indexmap = { version = "2.7.1", features = ["rayon"] }
+ 
+ # ECS
+-specs = { workspace = true, features = [
+-    "serde",
+-    "storage-event-control",
+-    "shred-derive",
+-] }
+-
+ [dev-dependencies]
+ #bench
+ criterion = { workspace = true }
+@@ -140,3 +134,10 @@ required-features = []
+ 
+ [[bin]]
+ name = "names_to_json"
++
++[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
++thread-priority = { workspace = true }
++specs = { workspace = true, features = ["serde", "storage-event-control", "shred-derive"] }
++
++[target.'cfg(target_arch = "wasm32")'.dependencies]
++specs = { version = "0.20", default-features = false, features = ["nightly", "storage-event-control", "shred-derive"] }
+diff --git a/common/assets/Cargo.toml b/common/assets/Cargo.toml
+index 9f2e2f6..93e709e 100644
+--- a/common/assets/Cargo.toml
++++ b/common/assets/Cargo.toml
+@@ -34,3 +34,9 @@ tempfile = "3.27.0"
+ [features]
+ hot-reloading = ["assets_manager/hot-reloading"]
+ plugins = ["dep:serde", "assets_manager/tar"]
++
++[target.'cfg(target_arch = "wasm32")'.dependencies]
++web-sys = { version = "0.3", features = ["Window", "Response", "Cache", "CacheStorage"] }
++wasm-bindgen = "0.2"
++wasm-bindgen-futures = "0.4"
++js-sys = "0.3"
+diff --git a/common/assets/src/lib.rs b/common/assets/src/lib.rs
+index e5da8cf..031b32a 100644
+--- a/common/assets/src/lib.rs
++++ b/common/assets/src/lib.rs
+@@ -17,22 +17,32 @@ pub use assets_manager::{
+     source::{self, Source},
+ };
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ mod fs;
+ #[cfg(feature = "plugins")] mod plugin_cache;
+ mod walk;
++#[cfg(target_arch = "wasm32")]
++mod web;
+ pub use walk::{Walk, walk_tree};
++#[cfg(target_arch = "wasm32")]
++pub use web::{WebSource, load_manifest, preload};
+ 
+ #[cfg(feature = "plugins")]
+ lazy_static! {
+     /// The HashMap where all loaded assets are stored in.
+     static ref ASSETS: plugin_cache::CombinedCache = plugin_cache::CombinedCache::new().unwrap();
+ }
+-#[cfg(not(feature = "plugins"))]
++#[cfg(all(not(feature = "plugins"), not(target_arch = "wasm32")))]
+ lazy_static! {
+     /// The HashMap where all loaded assets are stored in.
+     static ref ASSETS: AssetCache =
+             AssetCache::with_source(fs::FileSystem::new().unwrap());
+ }
++#[cfg(all(not(feature = "plugins"), target_arch = "wasm32"))]
++lazy_static! {
++    /// The HashMap where all loaded assets are stored in.
++    static ref ASSETS: AssetCache = AssetCache::with_source(web::WebSource);
++}
+ 
+ // register a new plugin
+ #[cfg(feature = "plugins")]
+diff --git a/common/assets/src/web.rs b/common/assets/src/web.rs
+new file mode 100644
+index 0000000..0b9ff62
+--- /dev/null
++++ b/common/assets/src/web.rs
+@@ -0,0 +1,188 @@
++//! A wasm `assets_manager::Source` backed by assets fetched over HTTP.
++//!
++//! `assets_manager`'s `Source` trait is synchronous, so assets are preloaded
++//! once (async `fetch`, cached in Cache Storage) into memory and then served
++//! from there. Files are keyed exactly like `assets_manager`'s `Embedded`
++//! source: `(id, ext)`, where `id` uses `.` as the path separator and `ext` may
++//! itself contain dots.
++
++use assets_manager::source::{DirEntry, FileContent, OwnedDirEntry, Source};
++use std::{collections::HashMap, io, path::Path, sync::OnceLock};
++use wasm_bindgen::JsCast;
++use wasm_bindgen_futures::JsFuture;
++
++const CACHE_NAME: &str = "veloren-assets";
++
++struct WebData {
++    files: HashMap<(String, String), Vec<u8>>,
++    dirs: HashMap<String, Vec<OwnedDirEntry>>,
++}
++
++static DATA: OnceLock<WebData> = OnceLock::new();
++
++/// In-memory source populated by [`preload`].
++#[derive(Debug, Clone, Copy)]
++pub struct WebSource;
++
++impl Source for WebSource {
++    fn read(&self, id: &str, ext: &str) -> io::Result<FileContent<'_>> {
++        let data = DATA
++            .get()
++            .ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, "assets not preloaded"))?;
++        match data.files.get(&(id.to_owned(), ext.to_owned())) {
++            Some(bytes) => Ok(FileContent::Slice(bytes)),
++            None => Err(io::ErrorKind::NotFound.into()),
++        }
++    }
++
++    fn read_dir(&self, id: &str, f: &mut dyn FnMut(DirEntry)) -> io::Result<()> {
++        let data = DATA
++            .get()
++            .ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, "assets not preloaded"))?;
++        let entries = data.dirs.get(id).ok_or(io::ErrorKind::NotFound)?;
++        entries.iter().for_each(|e| f(e.as_dir_entry()));
++        Ok(())
++    }
++
++    fn exists(&self, entry: DirEntry) -> bool {
++        match DATA.get() {
++            Some(data) => match entry {
++                DirEntry::File(id, ext) => data.files.contains_key(&(id.to_owned(), ext.to_owned())),
++                DirEntry::Directory(id) => data.dirs.contains_key(id),
++            },
++            None => false,
++        }
++    }
++}
++
++/// Fetch `manifest_url` and return its non-empty, non-comment lines as relative
++/// asset paths.
++pub async fn load_manifest(manifest_url: &str) -> Result<Vec<String>, String> {
++    let bytes = fetch_cached(manifest_url).await?;
++    let text = String::from_utf8(bytes).map_err(|e| format!("manifest not utf8: {e}"))?;
++    Ok(text
++        .lines()
++        .map(str::trim)
++        .filter(|l| !l.is_empty() && !l.starts_with('#'))
++        .map(str::to_owned)
++        .collect())
++}
++
++/// Fetch every path in `manifest` (relative to `base_url`) into memory and
++/// install it as the global asset source. Must be called before any asset load.
++/// `on_progress` is called as `(loaded, total)` after each file.
++pub async fn preload(
++    base_url: &str,
++    manifest: &[&str],
++    mut on_progress: impl FnMut(usize, usize),
++) -> Result<usize, String> {
++    let total = manifest.len();
++    let mut files: HashMap<(String, String), Vec<u8>> = HashMap::new();
++    for (i, path) in manifest.iter().enumerate() {
++        let url = format!("{}/{}", base_url.trim_end_matches('/'), path);
++        let bytes = fetch_cached(&url)
++            .await
++            .map_err(|e| format!("fetch {path}: {e}"))?;
++        files.insert(id_ext_of(path), bytes);
++        on_progress(i + 1, total);
++    }
++    let dirs = build_dirs(&files);
++    let count = files.len();
++    DATA.set(WebData { files, dirs })
++        .map_err(|_| "assets already preloaded".to_string())?;
++    Ok(count)
++}
++
++/// Fetch a URL, using Cache Storage as a best-effort cache (survives reloads).
++async fn fetch_cached(url: &str) -> Result<Vec<u8>, String> {
++    let cache = open_cache().await.ok();
++    if let Some(cache) = &cache {
++        if let Ok(existing) = JsFuture::from(cache.match_with_str(url)).await {
++            if !existing.is_undefined() && !existing.is_null() {
++                if let Ok(resp) = existing.dyn_into::<web_sys::Response>() {
++                    return read_bytes(resp).await;
++                }
++            }
++        }
++    }
++    let resp = fetch_response(url).await?;
++    if let Some(cache) = &cache {
++        if let Ok(clone) = resp.clone() {
++            let _ = JsFuture::from(cache.put_with_str(url, &clone)).await;
++        }
++    }
++    read_bytes(resp).await
++}
++
++async fn fetch_response(url: &str) -> Result<web_sys::Response, String> {
++    let win = web_sys::window().ok_or("no window")?;
++    let value = JsFuture::from(win.fetch_with_str(url))
++        .await
++        .map_err(|e| format!("{e:?}"))?;
++    let resp: web_sys::Response = value.dyn_into().map_err(|_| "not a Response")?;
++    if !resp.ok() {
++        return Err(format!("HTTP {}", resp.status()));
++    }
++    Ok(resp)
++}
++
++async fn read_bytes(resp: web_sys::Response) -> Result<Vec<u8>, String> {
++    let buffer = JsFuture::from(resp.array_buffer().map_err(|e| format!("{e:?}"))?)
++        .await
++        .map_err(|e| format!("{e:?}"))?;
++    Ok(js_sys::Uint8Array::new(&buffer).to_vec())
++}
++
++async fn open_cache() -> Result<web_sys::Cache, String> {
++    let caches = web_sys::window()
++        .ok_or("no window")?
++        .caches()
++        .map_err(|e| format!("caches unavailable: {e:?}"))?;
++    let promise = caches.open(CACHE_NAME);
++    JsFuture::from(promise)
++        .await
++        .map_err(|e| format!("open cache: {e:?}"))?
++        .dyn_into::<web_sys::Cache>()
++        .map_err(|_| "not a Cache".to_string())
++}
++
++fn id_ext_of(rel: &str) -> (String, String) {
++    let path = Path::new(rel);
++    let name = path.file_name().and_then(|n| n.to_str()).unwrap_or(rel);
++    let (stem, ext) = name.split_once('.').unwrap_or((name, ""));
++    let dir = path.parent().and_then(|p| p.to_str()).unwrap_or("");
++    let id = if dir.is_empty() {
++        stem.to_owned()
++    } else {
++        format!("{}.{}", dir.replace('/', "."), stem)
++    };
++    (id, ext.to_owned())
++}
++
++fn parent_id(id: &str) -> String {
++    id.rfind('.').map_or(String::new(), |i| id[..i].to_owned())
++}
++
++fn build_dirs(files: &HashMap<(String, String), Vec<u8>>) -> HashMap<String, Vec<OwnedDirEntry>> {
++    let mut dirs: HashMap<String, Vec<OwnedDirEntry>> = HashMap::new();
++    dirs.entry(String::new()).or_default();
++    for (id, ext) in files.keys() {
++        let parent = parent_id(id);
++        dirs.entry(parent.clone())
++            .or_default()
++            .push(OwnedDirEntry::File(id.clone().into(), ext.clone().into()));
++        let mut cur = parent;
++        while !cur.is_empty() {
++            let p = parent_id(&cur);
++            let entry = dirs.entry(p.clone()).or_default();
++            let already = entry
++                .iter()
++                .any(|e| matches!(e, OwnedDirEntry::Directory(d) if d.as_ref() == cur));
++            if !already {
++                entry.push(OwnedDirEntry::Directory(cur.clone().into()));
++            }
++            cur = p;
++        }
++    }
++    dirs
++}
+diff --git a/common/ecs/Cargo.toml b/common/ecs/Cargo.toml
+index 96ade22..715d4b4 100644
+--- a/common/ecs/Cargo.toml
++++ b/common/ecs/Cargo.toml
+@@ -13,10 +13,16 @@ workspace = true
+ 
+ tracing = { workspace = true }
+ common-base = { package = "veloren-common-base", path = "../base" }
++web-time = "1"
+ 
+ # ECS
+-specs = { workspace = true, features = ["serde", "storage-event-control"] }
+ 
+ [dev-dependencies]
+ #bench
+ float-cmp = "0.10.0"
++
++[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
++specs = { workspace = true, features = ["serde", "storage-event-control"] }
++
++[target.'cfg(target_arch = "wasm32")'.dependencies]
++specs = { version = "0.20", default-features = false, features = ["nightly", "storage-event-control"] }
+diff --git a/common/ecs/src/system.rs b/common/ecs/src/system.rs
+index c8966c7..90e41b2 100644
+--- a/common/ecs/src/system.rs
++++ b/common/ecs/src/system.rs
+@@ -1,6 +1,7 @@
+ use crate::metrics::SysMetrics;
+ use specs::{ReadExpect, RunNow};
+-use std::{collections::HashMap, time::Instant};
++use std::collections::HashMap;
++use web_time::Instant;
+ 
+ /// measuring the level of threads a unit of code ran on. Use Rayon when it ran
+ /// on their threadpool. Use Exact when you know on how many threads your code
+diff --git a/common/frontend/Cargo.toml b/common/frontend/Cargo.toml
+index 047f023..8f09670 100644
+--- a/common/frontend/Cargo.toml
++++ b/common/frontend/Cargo.toml
+@@ -17,9 +17,11 @@ common-base = { package = "veloren-common-base", path = "../base" }
+ # Logging
+ termcolor = "1.1"
+ tracing = { workspace = true }
+-tracing-appender = "0.2.0"
+ tracing-subscriber =  { workspace = true, features = ["tracing-log"] }
+ 
++[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
++tracing-appender = "0.2.0"
++
+ # Tracy
+ # NOTE: This must be kept in sync with the `profiling` version in `common/base`.
+ # NOTE: `=` since the minor version of tracing-tracy bumped a major version of `tracy-client`
+diff --git a/common/frontend/src/lib.rs b/common/frontend/src/lib.rs
+index e8447a6..94dd51d 100644
+--- a/common/frontend/src/lib.rs
++++ b/common/frontend/src/lib.rs
+@@ -1,13 +1,22 @@
+-#[cfg(not(feature = "tracy"))] use std::fs;
++#[cfg(all(not(feature = "tracy"), not(target_arch = "wasm32")))] use std::fs;
+ use std::path::Path;
+ 
+ use termcolor::{ColorChoice, StandardStream};
+ use tracing::info;
++#[cfg(not(target_arch = "wasm32"))]
+ use tracing_appender::non_blocking::WorkerGuard;
+ use tracing_subscriber::{
+     EnvFilter, filter::LevelFilter, fmt::writer::MakeWriter, prelude::*, registry,
+ };
+ 
++#[cfg(target_arch = "wasm32")]
++#[derive(Default)]
++struct WasmGuard;
++#[cfg(target_arch = "wasm32")]
++impl Drop for WasmGuard {
++    fn drop(&mut self) {}
++}
++
+ const RUST_LOG_ENV: &str = "RUST_LOG";
+ 
+ /// Initialise tracing and logging for the logs_path.
+@@ -43,10 +52,12 @@ where
+ {
+     // To hold the guards that we create, they will cause the logs to be
+     // flushed when they're dropped.
+-    #[cfg(not(feature = "tracy"))]
++    #[cfg(all(not(feature = "tracy"), not(target_arch = "wasm32")))]
+     let mut guards: Vec<WorkerGuard> = Vec::new();
+-    #[cfg(feature = "tracy")]
++    #[cfg(all(feature = "tracy", not(target_arch = "wasm32")))]
+     let guards: Vec<WorkerGuard> = Vec::new();
++    #[cfg(target_arch = "wasm32")]
++    let guards: Vec<WasmGuard> = Vec::new();
+ 
+     // We will do lower logging than the default (INFO) by INCLUSION. This
+     // means that if you need lower level logging for a specific module, then
+@@ -109,56 +120,71 @@ where
+     let filter = filter; // mutation is done
+ 
+     let registry = registry();
+-    #[cfg(not(feature = "tracy"))]
+-    let mut file_setup = false;
+-    #[cfg(feature = "tracy")]
+-    let file_setup = false;
+-    #[cfg(feature = "tracy")]
+-    let _terminal = terminal;
+-
+-    // Create the terminal writer layer.
+-    #[cfg(feature = "tracy")]
+-    let registry = registry.with(tracing_tracy::TracyLayer::new(
+-        tracing_tracy::DefaultConfig::default(),
+-    ));
+-    #[cfg(not(feature = "tracy"))]
+-    let registry = {
+-        let (non_blocking, stdio_guard) = tracing_appender::non_blocking(terminal.make_writer());
+-        guards.push(stdio_guard);
+-        registry.with(tracing_subscriber::fmt::layer().with_writer(non_blocking))
+-    };
+ 
+-    // Try to create the log file's parent folders.
+-    #[cfg(not(feature = "tracy"))]
+-    if let Some((path, file)) = log_path_file {
+-        match fs::create_dir_all(path) {
+-            Ok(_) => {
+-                let file_appender = tracing_appender::rolling::never(path, file); // It is actually rolling daily since the log name is changing daily
+-                let (non_blocking_file, file_guard) = tracing_appender::non_blocking(file_appender);
+-                guards.push(file_guard);
+-                file_setup = true;
+-                registry
+-                    .with(tracing_subscriber::fmt::layer().with_writer(non_blocking_file))
+-                    .with(filter)
+-                    .init();
+-            },
+-            Err(e) => {
+-                tracing::error!(
+-                    ?e,
+-                    "Failed to create log file!. Falling back to terminal logging only.",
+-                );
+-                registry.with(filter).init();
+-            },
++    #[cfg(target_arch = "wasm32")]
++    {
++        let _ = (log_path_file, terminal);
++        registry
++            .with(tracing_subscriber::fmt::layer().with_writer(std::io::stdout))
++            .with(filter)
++            .init();
++    }
++
++    #[cfg(not(target_arch = "wasm32"))]
++    {
++        #[cfg(not(feature = "tracy"))]
++        let mut file_setup = false;
++        #[cfg(feature = "tracy")]
++        let file_setup = false;
++        #[cfg(feature = "tracy")]
++        let _terminal = terminal;
++
++        // Create the terminal writer layer.
++        #[cfg(feature = "tracy")]
++        let registry = registry.with(tracing_tracy::TracyLayer::new(
++            tracing_tracy::DefaultConfig::default(),
++        ));
++        #[cfg(not(feature = "tracy"))]
++        let registry = {
++            let (non_blocking, stdio_guard) =
++                tracing_appender::non_blocking(terminal.make_writer());
++            guards.push(stdio_guard);
++            registry.with(tracing_subscriber::fmt::layer().with_writer(non_blocking))
++        };
++
++        // Try to create the log file's parent folders.
++        #[cfg(not(feature = "tracy"))]
++        if let Some((path, file)) = log_path_file {
++            match fs::create_dir_all(path) {
++                Ok(_) => {
++                    let file_appender = tracing_appender::rolling::never(path, file);
++                    let (non_blocking_file, file_guard) =
++                        tracing_appender::non_blocking(file_appender);
++                    guards.push(file_guard);
++                    file_setup = true;
++                    registry
++                        .with(tracing_subscriber::fmt::layer().with_writer(non_blocking_file))
++                        .with(filter)
++                        .init();
++                },
++                Err(e) => {
++                    tracing::error!(
++                        ?e,
++                        "Failed to create log file!. Falling back to terminal logging only.",
++                    );
++                    registry.with(filter).init();
++                },
++            }
++        } else {
++            registry.with(filter).init();
+         }
+-    } else {
++        #[cfg(feature = "tracy")]
+         registry.with(filter).init();
+-    }
+-    #[cfg(feature = "tracy")]
+-    registry.with(filter).init();
+ 
+-    if file_setup {
+-        let (path, file) = log_path_file.unwrap();
+-        info!(?path, ?file, "Setup terminal and file logging.");
++        if file_setup {
++            let (path, file) = log_path_file.unwrap();
++            info!(?path, ?file, "Setup terminal and file logging.");
++        }
+     }
+ 
+     if tracing::level_enabled!(tracing::Level::TRACE) {
+diff --git a/common/net/Cargo.toml b/common/net/Cargo.toml
+index bd0c146..e3db31e 100644
+--- a/common/net/Cargo.toml
++++ b/common/net/Cargo.toml
+@@ -28,7 +28,12 @@ tracing = { workspace = true }
+ hashbrown = { workspace = true }
+ 
+ # ECS
+-specs = { workspace = true, features = ["serde", "storage-event-control"] }
+ 
+ # Serde
+ serde = { workspace = true }
++
++[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
++specs = { workspace = true, features = ["serde", "storage-event-control"] }
++
++[target.'cfg(target_arch = "wasm32")'.dependencies]
++specs = { version = "0.20", default-features = false, features = ["nightly", "storage-event-control"] }
+diff --git a/common/src/clock.rs b/common/src/clock.rs
+index 723cb58..366a384 100644
+--- a/common/src/clock.rs
++++ b/common/src/clock.rs
+@@ -1,5 +1,6 @@
+ use common_base::span;
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++use web_time::Instant;
+ use vek::Lerp;
+ 
+ /// A type for maintaining consistent tick/frame pacing.
+@@ -100,6 +101,7 @@ impl Clock {
+ 
+         // Give the tick thread realtime priority to minimise stuttering. Don't do this
+         // all the time to avoid upsetting the scheduler.
++        #[cfg(not(target_arch = "wasm32"))]
+         if self.tick == 0
+         /* .is_multiple_of(30) */
+         {
+@@ -147,7 +149,10 @@ impl Clock {
+ 
+         // Sleep for any remaining time before the next tick
+         if let Some(sleep_dur) = self.target_dt.checked_sub(busy_time) {
++            #[cfg(not(target_arch = "wasm32"))]
+             spin_sleep::sleep(sleep_dur);
++            #[cfg(target_arch = "wasm32")]
++            let _ = sleep_dur;
+         }
+ 
+         // Update clock state
+diff --git a/common/src/comp/chat.rs b/common/src/comp/chat.rs
+index 593d618..44f17bd 100644
+--- a/common/src/comp/chat.rs
++++ b/common/src/comp/chat.rs
+@@ -5,7 +5,8 @@ use crate::{
+ use common_i18n::Content;
+ use serde::{Deserialize, Serialize};
+ use specs::{Component, DenseVecStorage};
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++use web_time::Instant;
+ 
+ /// A player's current chat mode. These are chat types that can only be sent by
+ /// the player.
+diff --git a/common/src/comp/invite.rs b/common/src/comp/invite.rs
+index d1c1f1e..6375842 100644
+--- a/common/src/comp/invite.rs
++++ b/common/src/comp/invite.rs
+@@ -24,7 +24,7 @@ impl Component for Invite {
+ 
+ /// Pending invites that an entity currently has sent out
+ /// (invited entity, instant when invite times out)
+-pub struct PendingInvites(pub Vec<(specs::Entity, InviteKind, std::time::Instant)>);
++pub struct PendingInvites(pub Vec<(specs::Entity, InviteKind, web_time::Instant)>);
+ impl Component for PendingInvites {
+     type Storage = specs::DenseVecStorage<Self>;
+ }
+diff --git a/common/src/comp/loot_owner.rs b/common/src/comp/loot_owner.rs
+index 1398509..70da352 100644
+--- a/common/src/comp/loot_owner.rs
++++ b/common/src/comp/loot_owner.rs
+@@ -6,8 +6,9 @@ use serde::{Deserialize, Serialize};
+ use specs::{Component, DerefFlaggedStorage};
+ use std::{
+     ops::Add,
+-    time::{Duration, Instant},
++    time::Duration,
+ };
++use web_time::Instant;
+ 
+ #[derive(Copy, Clone, Debug, Serialize, Deserialize)]
+ pub struct LootOwner {
+diff --git a/common/src/comp/presence.rs b/common/src/comp/presence.rs
+index 7b51410..67d24bf 100644
+--- a/common/src/comp/presence.rs
++++ b/common/src/comp/presence.rs
+@@ -1,7 +1,8 @@
+ use crate::{ViewDistances, character::CharacterId};
+ use serde::{Deserialize, Serialize};
+ use specs::Component;
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++use web_time::Instant;
+ use vek::*;
+ 
+ #[derive(Debug)]
+diff --git a/common/src/slowjob.rs b/common/src/slowjob.rs
+index 4812064..65b33e5 100644
+--- a/common/src/slowjob.rs
++++ b/common/src/slowjob.rs
+@@ -1,10 +1,13 @@
+ use hashbrown::HashMap;
++#[cfg(not(target_arch = "wasm32"))]
+ use rayon::ThreadPool;
++#[cfg(not(target_arch = "wasm32"))]
+ use std::{
+     collections::VecDeque,
+     sync::{Arc, Mutex},
+-    time::Instant,
+ };
++use web_time::Instant;
++#[cfg(not(target_arch = "wasm32"))]
+ use tracing::{error, warn};
+ 
+ /// Provides a Wrapper around rayon threadpool to execute slow-jobs.
+@@ -44,19 +47,23 @@ use tracing::{error, warn};
+ /// pool.configure("CHUNK_GENERATOR", |n| n / 2);
+ /// pool.spawn("CHUNK_GENERATOR", move || println!("this is a job"));
+ /// ```
++#[cfg(not(target_arch = "wasm32"))]
+ #[derive(Clone)]
+ pub struct SlowJobPool {
+     internal: Arc<Mutex<InternalSlowJobPool>>,
+ }
+ 
+ #[derive(Debug)]
++#[cfg_attr(target_arch = "wasm32", allow(dead_code))]
+ pub struct SlowJob {
+     name: String,
+     id: u64,
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ type JobType = Box<dyn FnOnce() + Send + Sync + 'static>;
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ struct InternalSlowJobPool {
+     next_id: u64,
+     queue: HashMap<String, VecDeque<Queue>>,
+@@ -70,12 +77,14 @@ struct InternalSlowJobPool {
+     internal: Option<Arc<Mutex<Self>>>,
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ #[derive(Debug)]
+ struct Config {
+     local_limit: u64,
+     local_spawned_and_running: u64,
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ struct Queue {
+     id: u64,
+     name: String,
+@@ -88,6 +97,7 @@ pub struct JobMetrics {
+     pub execution_end: Instant,
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ impl Queue {
+     fn new<F>(name: &str, id: u64, internal: &Arc<Mutex<InternalSlowJobPool>>, f: F) -> Self
+     where
+@@ -120,6 +130,7 @@ impl Queue {
+     }
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ impl InternalSlowJobPool {
+     pub fn new(
+         global_limit: u64,
+@@ -141,20 +152,23 @@ impl InternalSlowJobPool {
+                         b = b.stack_size(stack_size);
+                     }
+                     b.spawn(|| {
+-                        use thread_priority::*;
+-                        let priority =
+-                            ThreadPriority::Crossplatform(TryFrom::try_from(15).unwrap());
+-                        if let Err(err) = cfg_select! {
+-                            target_os = "linux" => std::thread::current().set_priority_and_policy(
+-                                ThreadSchedulePolicy::Normal(NormalThreadSchedulePolicy::Batch),
+-                                priority,
+-                            ),
+-                            _ => std::thread::current().set_priority(priority),
+-                        } {
+-                            tracing::warn!(
+-                                "Unable to set priority/schedule policy for slow job pool thread: \
+-                                 {err}"
+-                            );
++                        #[cfg(not(target_arch = "wasm32"))]
++                        {
++                            use thread_priority::*;
++                            let priority =
++                                ThreadPriority::Crossplatform(TryFrom::try_from(15).unwrap());
++                            if let Err(err) = cfg_select! {
++                                target_os = "linux" => std::thread::current().set_priority_and_policy(
++                                    ThreadSchedulePolicy::Normal(NormalThreadSchedulePolicy::Batch),
++                                    priority,
++                                ),
++                                _ => std::thread::current().set_priority(priority),
++                            } {
++                                tracing::warn!(
++                                    "Unable to set priority/schedule policy for slow job pool thread: \
++                                     {err}"
++                                );
++                            }
+                         }
+                         thread.run()
+                     })?;
+@@ -367,6 +381,7 @@ impl InternalSlowJobPool {
+     }
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ impl SlowJobPool {
+     pub fn new(global_limit: u64, jobs_metrics_cnt: usize, threadpool: Arc<ThreadPool>) -> Self {
+         Self {
+@@ -437,6 +452,53 @@ impl SlowJobPool {
+     }
+ }
+ 
++/// On wasm we run single-threaded, so slow jobs are simply executed inline when
++/// spawned. This keeps the same API surface without any rayon thread pool.
++#[cfg(target_arch = "wasm32")]
++#[derive(Clone, Default)]
++pub struct SlowJobPool;
++
++#[cfg(target_arch = "wasm32")]
++impl SlowJobPool {
++    pub fn new(_global_limit: u64, _jobs_metrics_cnt: usize, _threadpool: ()) -> Self { Self }
++
++    /// configure a NAME to spawn up to f(n) threads, depending on how many
++    /// threads we globally have available
++    pub fn configure<F>(&self, _name: &str, _f: F)
++    where
++        F: Fn(u64) -> u64,
++    {
++    }
++
++    /// spawn a new slow job on a certain NAME IF it can run immediately
++    #[expect(clippy::result_unit_err)]
++    pub fn try_run<F>(&self, name: &str, f: F) -> Result<SlowJob, ()>
++    where
++        F: FnOnce() + Send + Sync + 'static,
++    {
++        f();
++        Ok(SlowJob {
++            name: name.to_owned(),
++            id: 0,
++        })
++    }
++
++    pub fn spawn<F>(&self, name: &str, f: F) -> SlowJob
++    where
++        F: FnOnce() + Send + Sync + 'static,
++    {
++        f();
++        SlowJob {
++            name: name.to_owned(),
++            id: 0,
++        }
++    }
++
++    pub fn cancel(&self, job: SlowJob) -> Result<(), SlowJob> { Err(job) }
++
++    pub fn take_metrics(&self) -> HashMap<String, Vec<JobMetrics>> { HashMap::new() }
++}
++
+ #[cfg(test)]
+ mod tests {
+     use super::*;
+diff --git a/common/src/store.rs b/common/src/store.rs
+index 8f53d67..dcb0807 100644
+--- a/common/src/store.rs
++++ b/common/src/store.rs
+@@ -1,3 +1,4 @@
++#[cfg(not(target_arch = "wasm32"))]
+ use rayon::prelude::*;
+ use std::{
+     cmp::{Eq, Ord, Ordering, PartialEq, PartialOrd},
+@@ -89,12 +90,22 @@ impl<T> Store<T> {
+ }
+ 
+ impl<T: Send + Sync> Store<T> {
++    #[cfg(not(target_arch = "wasm32"))]
+     pub fn par_iter_mut(&mut self) -> impl ParallelIterator<Item = (Id<T>, &mut T)> {
+         self.items
+             .par_iter_mut()
+             .enumerate()
+             .map(|(idx, obj)| (Id(idx as u64, PhantomData), obj))
+     }
++
++    /// Serial fallback used on wasm, where the ECS runs single-threaded.
++    #[cfg(target_arch = "wasm32")]
++    pub fn par_iter_mut(&mut self) -> impl Iterator<Item = (Id<T>, &mut T)> {
++        self.items
++            .iter_mut()
++            .enumerate()
++            .map(|(idx, obj)| (Id(idx as u64, PhantomData), obj))
++    }
+ }
+ 
+ impl<T> Index<Id<T>> for Store<T> {
+diff --git a/common/state/Cargo.toml b/common/state/Cargo.toml
+index 3111c6c..cd00ab9 100644
+--- a/common/state/Cargo.toml
++++ b/common/state/Cargo.toml
+@@ -27,9 +27,7 @@ vek = { workspace = true }
+ 
+ # Data structures
+ hashbrown = { workspace = true }
+-
+-# ECS
+-specs = { workspace = true, features = ["serde", "storage-event-control", "derive"] }
++web-time = "1"
+ 
+ # Plugins
+ atomic_refcell = { workspace = true, optional = true }
+@@ -46,7 +44,13 @@ async-trait = { workspace = true }
+ futures = "0.3.30"
+ sha2 = { workspace = true, optional = true }
+ hex = { workspace = true, optional = true }
+-thread-priority = { workspace = true }
+ 
+ # Tweak running code
+ #inline_tweak = { version = "1.0.8", features = ["release_tweak"] }
++
++[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
++thread-priority = { workspace = true }
++specs = { workspace = true, features = ["serde", "storage-event-control", "derive"] }
++
++[target.'cfg(target_arch = "wasm32")'.dependencies]
++specs = { version = "0.20", default-features = false, features = ["nightly", "storage-event-control", "derive"] }
+diff --git a/common/state/src/state.rs b/common/state/src/state.rs
+index eabb2af..fafb8a9 100644
+--- a/common/state/src/state.rs
++++ b/common/state/src/state.rs
+@@ -32,6 +32,7 @@ use common_ecs::{PhysicsMetrics, SysMetrics};
+ use common_net::sync::{WorldSyncExt, interpolation as sync_interp};
+ use core::{convert::identity, time::Duration};
+ use hashbrown::{HashMap, HashSet};
++#[cfg(not(target_arch = "wasm32"))]
+ use rayon::{ThreadPool, ThreadPoolBuilder};
+ use specs::{
+     Component, DispatcherBuilder, Entity as EcsEntity, WorldExt,
+@@ -39,13 +40,10 @@ use specs::{
+     shred::{Fetch, FetchMut, SendDispatcher},
+     storage::{MaskedStorage as EcsMaskedStorage, Storage as EcsStorage},
+ };
+-use std::{
+-    sync::{
+-        Arc,
+-        atomic::{AtomicBool, Ordering},
+-    },
+-    time::Instant,
+-};
++use std::sync::Arc;
++use web_time::Instant;
++#[cfg(not(target_arch = "wasm32"))]
++use std::sync::atomic::{AtomicBool, Ordering};
+ use timer_queue::TimerQueue;
+ use vek::*;
+ 
+@@ -134,14 +132,19 @@ pub struct BlockDiff {
+ /// global states like weather, time of day, etc.
+ pub struct State {
+     ecs: specs::World,
+-    // Avoid lifetime annotation by storing a thread pool instead of the whole dispatcher
+-    thread_pool: Arc<ThreadPool>,
++    // Avoid lifetime annotation by storing a thread pool instead of the whole dispatcher.
++    // On wasm we run single-threaded, so `Pools` is a unit type and this is unused.
++    thread_pool: Pools,
+     dispatcher: SendDispatcher<'static>,
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ pub type Pools = Arc<ThreadPool>;
++#[cfg(target_arch = "wasm32")]
++pub type Pools = ();
+ 
+ impl State {
++    #[cfg(not(target_arch = "wasm32"))]
+     pub fn pools(game_mode: GameMode) -> Pools {
+         let (thread_name_infix, is_main_task) = match game_mode {
+             GameMode::Server => ("s", true),
+@@ -153,6 +156,8 @@ impl State {
+ 
+         let is_first_error = Arc::new(AtomicBool::new(true));
+         let set_priority = move || {
++            #[cfg(not(target_arch = "wasm32"))]
++            {
+             use thread_priority::*;
+             let priority = if is_main_task {
+                 // These threads are critical for the main tick loop, so need a higher priority
+@@ -174,6 +179,7 @@ impl State {
+                     "Unable to set priority/schedule policy for dispatcher pool thread: {err}"
+                 );
+             }
++            }
+         };
+ 
+         Arc::new(
+@@ -200,6 +206,11 @@ impl State {
+         )
+     }
+ 
++    /// On wasm we cannot spawn a rayon thread pool, so ECS systems run serially
++    /// and `Pools` is just the unit type.
++    #[cfg(target_arch = "wasm32")]
++    pub fn pools(_game_mode: GameMode) -> Pools {}
++
+     /// Create a new `State` in client mode.
+     pub fn client(
+         pools: Pools,
+@@ -247,8 +258,11 @@ impl State {
+         #[cfg(feature = "plugins")] plugin_mgr: PluginMgr,
+     ) -> Self {
+         prof_span!(guard, "create dispatcher");
++        #[cfg(not(target_arch = "wasm32"))]
+         let mut dispatch_builder =
+             DispatcherBuilder::<'static, 'static>::new().with_pool(Arc::clone(&pools));
++        #[cfg(target_arch = "wasm32")]
++        let mut dispatch_builder = DispatcherBuilder::<'static, 'static>::new();
+         // TODO: Consider alternative ways to do this
+         add_systems(&mut dispatch_builder);
+         let dispatcher = dispatch_builder
+@@ -260,7 +274,7 @@ impl State {
+         Self {
+             ecs: Self::setup_ecs_world(
+                 game_mode,
+-                Arc::clone(&pools),
++                &pools,
+                 map_size_lg,
+                 default_chunk,
+                 #[cfg(feature = "plugins")]
+@@ -276,7 +290,7 @@ impl State {
+     // EventBus<ServerEvent> to the server)
+     fn setup_ecs_world(
+         game_mode: GameMode,
+-        thread_pool: Arc<ThreadPool>,
++        thread_pool: &Pools,
+         map_size_lg: MapSizeLg,
+         default_chunk: Arc<TerrainChunk>,
+         #[cfg(feature = "plugins")] mut plugin_mgr: PluginMgr,
+@@ -409,7 +423,7 @@ impl State {
+         let num_cpu = num_cpus::get() as u64;
+         let slow_limit = (num_cpu / 2 + num_cpu / 4).max(1);
+         tracing::trace!(?slow_limit, "Slow Thread limit");
+-        ecs.insert(SlowJobPool::new(slow_limit, 10_000, thread_pool));
++        ecs.insert(SlowJobPool::new(slow_limit, 10_000, thread_pool.clone()));
+ 
+         // TODO: only register on the server
+         ecs.insert(comp::group::GroupManager::default());
+@@ -517,7 +531,7 @@ impl State {
+     /// Get a mutable reference to the internal ECS world.
+     pub fn ecs_mut(&mut self) -> &mut specs::World { &mut self.ecs }
+ 
+-    pub fn thread_pool(&self) -> &Arc<ThreadPool> { &self.thread_pool }
++    pub fn thread_pool(&self) -> &Pools { &self.thread_pool }
+ 
+     /// Get a reference to the `TerrainChanges` structure of the state. This
+     /// contains information about terrain state that has changed since the
+diff --git a/common/systems/Cargo.toml b/common/systems/Cargo.toml
+index 6c2eb6d..55183ce 100644
+--- a/common/systems/Cargo.toml
++++ b/common/systems/Cargo.toml
+@@ -26,16 +26,15 @@ vek = { workspace = true }
+ ordered-float = { workspace = true }
+ itertools = { workspace = true }
+ 
+-# ECS
+-specs = { workspace = true, features = [
+-    "serde",
+-    "storage-event-control",
+-    "derive",
+-] }
+-
+ # Tweak running code
+ # inline_tweak = { workspace = true, features = ["release_tweak"] }
+ 
+ [dev-dependencies]
+ # Setup a State
+ common-state = { package = "veloren-common-state", path = "../state" }
++
++[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
++specs = { workspace = true, features = ["serde", "storage-event-control", "derive"] }
++
++[target.'cfg(target_arch = "wasm32")'.dependencies]
++specs = { version = "0.20", default-features = false, features = ["nightly", "storage-event-control", "derive"] }
+diff --git a/common/systems/src/beam.rs b/common/systems/src/beam.rs
+index 114047f..3e468e0 100644
+--- a/common/systems/src/beam.rs
++++ b/common/systems/src/beam.rs
+@@ -20,10 +20,15 @@ use common::{
+ };
+ use common_ecs::{Job, Origin, ParMode, Phase, System};
+ use rand::RngExt;
++#[cfg(not(target_arch = "wasm32"))]
+ use rayon::iter::ParallelIterator;
+ use specs::{
+-    Entities, LendJoin, ParJoin, Read, ReadExpect, ReadStorage, SystemData, WriteStorage, shred,
++    Entities, LendJoin, Read, ReadExpect, ReadStorage, SystemData, WriteStorage, shred,
+ };
++#[cfg(not(target_arch = "wasm32"))]
++use specs::ParJoin;
++#[cfg(target_arch = "wasm32")]
++use crate::serial_join::ParJoinSerial;
+ use vek::*;
+ 
+ event_emitters! {
+diff --git a/common/systems/src/buff.rs b/common/systems/src/buff.rs
+index 62081ef..8282011 100644
+--- a/common/systems/src/buff.rs
++++ b/common/systems/src/buff.rs
+@@ -27,11 +27,15 @@ use common::{
+ use common_base::prof_span;
+ use common_ecs::{Job, Origin, ParMode, Phase, System};
+ use rand::RngExt;
++#[cfg(not(target_arch = "wasm32"))]
+ use rayon::iter::ParallelIterator;
+ use specs::{
+-    Entities, Entity, LendJoin, ParJoin, Read, ReadExpect, ReadStorage, SystemData, WriteStorage,
+-    shred,
++    Entities, Entity, LendJoin, Read, ReadExpect, ReadStorage, SystemData, WriteStorage, shred,
+ };
++#[cfg(not(target_arch = "wasm32"))]
++use specs::ParJoin;
++#[cfg(target_arch = "wasm32")]
++use crate::serial_join::ParJoinSerial;
+ use vek::Vec3;
+ 
+ event_emitters! {
+diff --git a/common/systems/src/interpolation.rs b/common/systems/src/interpolation.rs
+index 4b02715..aaaaafb 100644
+--- a/common/systems/src/interpolation.rs
++++ b/common/systems/src/interpolation.rs
+@@ -5,10 +5,11 @@ use common::{
+ use common_base::prof_span;
+ use common_ecs::{Job, Origin, Phase, System};
+ use common_net::sync::InterpolatableComponent;
+-use specs::{
+-    Entities, ParJoin, Read, ReadStorage, SystemData, WriteStorage, prelude::ParallelIterator,
+-    shred,
+-};
++use specs::{Entities, Read, ReadStorage, SystemData, WriteStorage, shred};
++#[cfg(not(target_arch = "wasm32"))]
++use specs::{ParJoin, prelude::ParallelIterator};
++#[cfg(target_arch = "wasm32")]
++use crate::serial_join::ParJoinSerial;
+ 
+ #[derive(SystemData)]
+ pub struct ReadData<'a> {
+diff --git a/common/systems/src/lib.rs b/common/systems/src/lib.rs
+index 88b9daa..dfc6c98 100644
+--- a/common/systems/src/lib.rs
++++ b/common/systems/src/lib.rs
+@@ -13,6 +13,8 @@ pub mod phys;
+ mod phys_events;
+ mod pool;
+ pub mod projectile;
++#[cfg(target_arch = "wasm32")]
++mod serial_join;
+ mod shockwave;
+ mod stats;
+ mod tether;
+diff --git a/common/systems/src/phys/mod.rs b/common/systems/src/phys/mod.rs
+index f7ff473..f54e689 100644
+--- a/common/systems/src/phys/mod.rs
++++ b/common/systems/src/phys/mod.rs
+@@ -22,11 +22,16 @@ use common::{
+ };
+ use common_base::{prof_span, span};
+ use common_ecs::{Job, Origin, ParMode, Phase, PhysicsMetrics, System};
++#[cfg(not(target_arch = "wasm32"))]
+ use rayon::iter::ParallelIterator;
+ use specs::{
+-    Entities, Join, LendJoin, ParJoin, Read, ReadExpect, ReadStorage, SystemData, Write,
+-    WriteExpect, WriteStorage, shred,
++    Entities, Join, LendJoin, Read, ReadExpect, ReadStorage, SystemData, Write, WriteExpect,
++    WriteStorage, shred,
+ };
++#[cfg(not(target_arch = "wasm32"))]
++use specs::ParJoin;
++#[cfg(target_arch = "wasm32")]
++use crate::serial_join::ParJoinSerial;
+ use vek::*;
+ 
+ mod collision;
+diff --git a/common/systems/src/serial_join.rs b/common/systems/src/serial_join.rs
+new file mode 100644
+index 0000000..906c230
+--- /dev/null
++++ b/common/systems/src/serial_join.rs
+@@ -0,0 +1,76 @@
++//! Serial stand-ins for the rayon `ParallelIterator` combinators used by systems.
++//!
++//! On `wasm32` the `specs` `parallel` feature is disabled (there is no rayon
++//! thread pool), so joins are serial. This shim lets the existing
++//! `<tuple>.par_join()` call sites keep working unchanged by returning a wrapper
++//! that offers the same combinators (`filter`, `map`, `map_init`,
++//! `for_each_init`, `fold`, `reduce`) backed by a plain iterator. It is only
++//! compiled for wasm; native keeps using rayon through `specs`'s `ParJoin`.
++
++use specs::{Join, join::JoinIter};
++use std::iter::{Filter, Map, Once};
++
++/// A wrapper around a serial join iterator exposing rayon-style combinators.
++pub struct SerialJoin<I>(I);
++
++impl<I: Iterator> SerialJoin<I> {
++    pub fn filter<P>(self, predicate: P) -> SerialJoin<Filter<I, P>>
++    where
++        P: FnMut(&I::Item) -> bool,
++    {
++        SerialJoin(self.0.filter(predicate))
++    }
++
++    pub fn map_init<B, H, G, F>(
++        self,
++        mut init: G,
++        mut f: F,
++    ) -> SerialJoin<Map<I, impl FnMut(I::Item) -> B>>
++    where
++        G: FnMut() -> H,
++        F: FnMut(&mut H, I::Item) -> B,
++    {
++        // Single-threaded, so a single "thread local" state is shared by every
++        // item instead of one per rayon worker.
++        let mut h = init();
++        SerialJoin(self.0.map(move |item| f(&mut h, item)))
++    }
++
++    pub fn for_each_init<H, G, F>(self, mut init: G, mut f: F)
++    where
++        G: FnMut() -> H,
++        F: FnMut(&mut H, I::Item),
++    {
++        let mut h = init();
++        self.0.for_each(|item| f(&mut h, item));
++    }
++
++    /// Emulates rayon's `fold`, which yields one accumulator per partition. In a
++    /// serial run there is exactly one partition, so this yields a single value
++    /// that a following `reduce` combines.
++    pub fn fold<T, ID, F>(self, mut init: ID, mut f: F) -> SerialJoin<Once<T>>
++    where
++        ID: FnMut() -> T,
++        F: FnMut(T, I::Item) -> T,
++    {
++        SerialJoin(std::iter::once(
++            self.0.fold(init(), |acc, item| f(acc, item)),
++        ))
++    }
++
++    pub fn reduce<T, ID, F>(self, mut init: ID, mut f: F) -> T
++    where
++        I: Iterator<Item = T>,
++        ID: FnMut() -> T,
++        F: FnMut(T, T) -> T,
++    {
++        self.0.fold(init(), |acc, item| f(acc, item))
++    }
++}
++
++/// Serial stand-in for `specs::ParJoin`, providing `.par_join()` on wasm.
++pub trait ParJoinSerial: Join + Sized {
++    fn par_join(self) -> SerialJoin<JoinIter<Self>> { SerialJoin(self.join()) }
++}
++
++impl<T: Join + Sized> ParJoinSerial for T {}
+diff --git a/network/Cargo.toml b/network/Cargo.toml
+index ac4ed9d..2fa174c 100644
+--- a/network/Cargo.toml
++++ b/network/Cargo.toml
+@@ -10,7 +10,7 @@ workspace = true
+ [features]
+ metrics = ["prometheus", "network-protocol/metrics"]
+ compression = ["lz-fear"]
+-quic = ["quinn"]
++quic = ["quinn", "rustls"]
+ 
+ default = ["metrics", "compression", "quic"]
+ 
+@@ -21,24 +21,23 @@ network-protocol = { package = "veloren-network-protocol", path = "protocol" }
+ #serialisation
+ bincode = { workspace = true }
+ serde = { workspace = true }
+-#ipv4/ipv6 behavior
+-socket2 = "0.6"
+ #sending
+ crossbeam-channel = { workspace = true }
+-tokio = { workspace = true, features = ["io-util", "macros", "net", "time"] }
++tokio = { workspace = true, features = ["io-util", "macros", "sync", "time", "rt"] }
+ tokio-stream = { version = "0.1.2", default-features = false }
+ #tracing and metrics
+ tracing = { workspace = true }
+ prometheus = { workspace = true, optional = true }
+ #async
+ futures-util = { workspace = true, features = ["std"] }
++futures-channel = "0.3"
+ async-channel = "2.1"                                   #use for .close() channels
+ #mpsc channel registry
+ lazy_static = { workspace = true }
+ rand = { workspace = true }
+-#quic support
++#quic support (native only)
+ quinn = { workspace = true, optional = true }
+-rustls = { workspace = true }
++rustls = { workspace = true, optional = true }
+ lz-fear = { version = "0.2", optional = true }
+ # async traits
+ async-trait = { workspace = true }
+@@ -46,6 +45,20 @@ bytes = "^1"
+ # faster HashMaps
+ hashbrown = { workspace = true }
+ 
++[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
++#ipv4/ipv6 behavior
++socket2 = "0.6"
++tokio = { workspace = true, features = ["net"] }
++
++[target.'cfg(target_arch = "wasm32")'.dependencies]
++web-time = "1"
++gloo-timers = { version = "0.3", features = ["futures"] }
++wasm-bindgen = "0.2"
++wasm-bindgen-futures = "0.4"
++js-sys = "0.3"
++web-sys = { version = "0.3", features = ["WebSocket", "MessageEvent", "BinaryType"] }
++
++
+ [dev-dependencies]
+ tracing-subscriber =  { workspace = true }
+ tokio = { workspace = true, default-features = false, features = [
+diff --git a/network/protocol/Cargo.toml b/network/protocol/Cargo.toml
+index a03356b..2c9bbc2 100644
+--- a/network/protocol/Cargo.toml
++++ b/network/protocol/Cargo.toml
+@@ -27,6 +27,9 @@ async-trait = { workspace = true }
+ bytes = "^1"
+ hashbrown = { workspace = true }
+ 
++[target.'cfg(target_arch = "wasm32")'.dependencies]
++web-time = "1"
++
+ [dev-dependencies]
+ async-channel = "2.1"
+ tokio = { workspace = true, features = ["macros"] }
+diff --git a/network/protocol/src/mpsc.rs b/network/protocol/src/mpsc.rs
+index d9da811..2c8d0b7 100644
+--- a/network/protocol/src/mpsc.rs
++++ b/network/protocol/src/mpsc.rs
+@@ -10,7 +10,11 @@ use crate::{
+     types::{Bandwidth, Promises},
+ };
+ use async_trait::async_trait;
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++#[cfg(target_arch = "wasm32")]
++use web_time::Instant;
++#[cfg(not(target_arch = "wasm32"))]
++use std::time::Instant;
+ #[cfg(feature = "trace_pedantic")]
+ use tracing::trace;
+ 
+diff --git a/network/protocol/src/quic.rs b/network/protocol/src/quic.rs
+index e95296a..6ad46be 100644
+--- a/network/protocol/src/quic.rs
++++ b/network/protocol/src/quic.rs
+@@ -13,7 +13,11 @@ use crate::{
+ use async_trait::async_trait;
+ use bytes::BytesMut;
+ use hashbrown::HashMap;
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++#[cfg(target_arch = "wasm32")]
++use web_time::Instant;
++#[cfg(not(target_arch = "wasm32"))]
++use std::time::Instant;
+ use tracing::info;
+ #[cfg(feature = "trace_pedantic")]
+ use tracing::trace;
+diff --git a/network/protocol/src/tcp.rs b/network/protocol/src/tcp.rs
+index 5214329..a6390e1 100644
+--- a/network/protocol/src/tcp.rs
++++ b/network/protocol/src/tcp.rs
+@@ -12,7 +12,11 @@ use crate::{
+ use async_trait::async_trait;
+ use bytes::BytesMut;
+ use hashbrown::HashMap;
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++#[cfg(target_arch = "wasm32")]
++use web_time::Instant;
++#[cfg(not(target_arch = "wasm32"))]
++use std::time::Instant;
+ use tracing::info;
+ #[cfg(feature = "trace_pedantic")]
+ use tracing::trace;
+diff --git a/network/src/api.rs b/network/src/api.rs
+index 7ab0690..d93df67 100644
+--- a/network/src/api.rs
++++ b/network/src/api.rs
+@@ -22,9 +22,10 @@ use std::{
+ };
+ use tokio::{
+     io,
+-    runtime::Runtime,
+     sync::{Mutex, mpsc, oneshot, watch},
+ };
++#[cfg(not(target_arch = "wasm32"))]
++use tokio::runtime::Runtime;
+ use tracing::*;
+ 
+ type A2sDisconnect = Arc<Mutex<Option<mpsc::UnboundedSender<(Pid, S2bShutdownBparticipant)>>>>;
+@@ -36,6 +37,8 @@ pub enum ConnectAddr {
+     Udp(SocketAddr),
+     #[cfg(feature = "quic")]
+     Quic(SocketAddr, quinn::ClientConfig, String),
++    #[cfg(target_arch = "wasm32")]
++    Ws(String),
+     Mpsc(u64),
+ }
+ 
+@@ -47,6 +50,8 @@ impl ConnectAddr {
+             Self::Tcp(addr) => Some(*addr),
+             Self::Udp(addr) => Some(*addr),
+             Self::Mpsc(_) => None,
++            #[cfg(target_arch = "wasm32")]
++            Self::Ws(_) => None,
+             #[cfg(feature = "quic")]
+             Self::Quic(addr, _, _) => Some(*addr),
+         }
+@@ -249,9 +254,13 @@ impl Network {
+     ///
+     /// [`Pid::new()`]: network_protocol::Pid::new
+     /// [`Runtime`]: tokio::runtime::Runtime
+-    pub fn new(participant_id: Pid, runtime: &Runtime) -> Self {
++    pub fn new(
++        participant_id: Pid,
++        #[cfg(not(target_arch = "wasm32"))] runtime: &Runtime,
++    ) -> Self {
+         Self::internal_new(
+             participant_id,
++            #[cfg(not(target_arch = "wasm32"))]
+             runtime,
+             #[cfg(feature = "metrics")]
+             None,
+@@ -283,16 +292,22 @@ impl Network {
+     #[cfg(feature = "metrics")]
+     pub fn new_with_registry(
+         participant_id: Pid,
+-        runtime: &Runtime,
++        #[cfg(not(target_arch = "wasm32"))] runtime: &Runtime,
+         registry: &Registry,
+         output_limit: usize,
+     ) -> Self {
+-        Self::internal_new(participant_id, runtime, Some(registry), output_limit)
++        Self::internal_new(
++            participant_id,
++            #[cfg(not(target_arch = "wasm32"))]
++            runtime,
++            Some(registry),
++            output_limit,
++        )
+     }
+ 
+     fn internal_new(
+         participant_id: Pid,
+-        runtime: &Runtime,
++        #[cfg(not(target_arch = "wasm32"))] runtime: &Runtime,
+         #[cfg(feature = "metrics")] registry: Option<&Registry>,
+         output_limit: usize,
+     ) -> Self {
+@@ -314,15 +329,30 @@ impl Network {
+             Arc::clone(&participant_disconnect_sender),
+             shutdown_sender,
+         );
+-        runtime.spawn(f);
+-        runtime.spawn(
+-            async move {
+-                trace!("Starting scheduler in own thread");
+-                scheduler.run().await;
+-                trace!("Stopping scheduler and his own thread");
+-            }
+-            .instrument(info_span!("network", ?p)),
+-        );
++        #[cfg(not(target_arch = "wasm32"))]
++        {
++            runtime.spawn(f);
++            runtime.spawn(
++                async move {
++                    trace!("Starting scheduler in own thread");
++                    scheduler.run().await;
++                    trace!("Stopping scheduler and his own thread");
++                }
++                .instrument(info_span!("network", ?p)),
++            );
++        }
++        #[cfg(target_arch = "wasm32")]
++        {
++            crate::rt::spawn(f);
++            crate::rt::spawn(
++                async move {
++                    trace!("Starting scheduler in own thread");
++                    scheduler.run().await;
++                    trace!("Stopping scheduler and his own thread");
++                }
++                .instrument(info_span!("network", ?p)),
++            );
++        }
+         Self {
+             local_pid: participant_id,
+             participant_disconnect_sender,
+@@ -1164,6 +1194,7 @@ impl PartialEq for Participant {
+     }
+ }
+ 
++#[cfg_attr(target_arch = "wasm32", allow(unused_mut))]
+ fn actively_wait<T, F>(name: &'static str, mut finished_receiver: oneshot::Receiver<T>, f: F)
+ where
+     F: FnOnce(T) + Send + 'static,
+@@ -1171,6 +1202,15 @@ where
+ {
+     const CHANNEL_ERR: &str = "Something is wrong in internal scheduler/participant coding";
+ 
++    #[cfg(target_arch = "wasm32")]
++    crate::rt::spawn(async move {
++        match finished_receiver.await {
++            Ok(data) => f(data),
++            Err(e) => error!("{}{}: {}", name, CHANNEL_ERR, e),
++        }
++    });
++
++    #[cfg(not(target_arch = "wasm32"))]
+     if let Ok(handle) = tokio::runtime::Handle::try_current() {
+         // When in Async Context WE MUST NOT SYNC BLOCK (as a deadlock might occur as
+         // other is queued behind). And we CANNOT join our Future_Handle
+diff --git a/network/src/channel.rs b/network/src/channel.rs
+index 237b1e5..8eae533 100644
+--- a/network/src/channel.rs
++++ b/network/src/channel.rs
+@@ -12,25 +12,32 @@ use network_protocol::{
+ use network_protocol::{QuicDataFormat, QuicDataFormatStream, QuicRecvProtocol, QuicSendProtocol};
+ use std::{
+     io,
+-    net::SocketAddr,
+     sync::{
+         Arc,
+         atomic::{AtomicU64, Ordering},
+     },
+     time::Duration,
+ };
++#[cfg(not(target_arch = "wasm32"))]
++use std::net::SocketAddr;
++use tokio::{
++    select,
++    sync::{Mutex, mpsc, oneshot},
++};
++#[cfg(not(target_arch = "wasm32"))]
+ use tokio::{
+     io::{AsyncReadExt, AsyncWriteExt},
+     net,
+     net::tcp::{OwnedReadHalf, OwnedWriteHalf},
+-    select,
+-    sync::{Mutex, mpsc, oneshot},
+ };
+ use tracing::{error, info, trace, warn};
+ 
+ #[derive(Debug)]
+ pub(crate) enum Protocols {
++    #[cfg(not(target_arch = "wasm32"))]
+     Tcp((TcpSendProtocol<TcpDrain>, TcpRecvProtocol<TcpSink>)),
++    #[cfg(target_arch = "wasm32")]
++    Ws((TcpSendProtocol<WsDrain>, TcpRecvProtocol<WsSink>)),
+     Mpsc((MpscSendProtocol<MpscDrain>, MpscRecvProtocol<MpscSink>)),
+     #[cfg(feature = "quic")]
+     Quic((QuicSendProtocol<QuicDrain>, QuicRecvProtocol<QuicSink>)),
+@@ -38,7 +45,10 @@ pub(crate) enum Protocols {
+ 
+ #[derive(Debug)]
+ pub(crate) enum SendProtocols {
++    #[cfg(not(target_arch = "wasm32"))]
+     Tcp(TcpSendProtocol<TcpDrain>),
++    #[cfg(target_arch = "wasm32")]
++    Ws(TcpSendProtocol<WsDrain>),
+     Mpsc(MpscSendProtocol<MpscDrain>),
+     #[cfg(feature = "quic")]
+     Quic(QuicSendProtocol<QuicDrain>),
+@@ -46,7 +56,10 @@ pub(crate) enum SendProtocols {
+ 
+ #[derive(Debug)]
+ pub(crate) enum RecvProtocols {
++    #[cfg(not(target_arch = "wasm32"))]
+     Tcp(TcpRecvProtocol<TcpSink>),
++    #[cfg(target_arch = "wasm32")]
++    Ws(TcpRecvProtocol<WsSink>),
+     Mpsc(MpscRecvProtocol<MpscSink>),
+     #[cfg(feature = "quic")]
+     Quic(QuicRecvProtocol<QuicSink>),
+@@ -64,6 +77,7 @@ pub(crate) type C2cMpscConnect = (
+ );
+ pub(crate) type C2sProtocol = (Protocols, ConnectAddr, Cid);
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ fn anonymize_addr(addr: &SocketAddr) -> String {
+     use std::net::IpAddr;
+     match addr.ip() {
+@@ -84,6 +98,7 @@ fn anonymize_addr(addr: &SocketAddr) -> String {
+ impl Protocols {
+     const MPSC_CHANNEL_BOUND: usize = 1000;
+ 
++    #[cfg(not(target_arch = "wasm32"))]
+     pub(crate) async fn with_tcp_connect(
+         addr: SocketAddr,
+         metrics: ProtocolMetricCache,
+@@ -102,6 +117,7 @@ impl Protocols {
+         Ok(Self::new_tcp(stream, metrics))
+     }
+ 
++    #[cfg(not(target_arch = "wasm32"))]
+     pub(crate) async fn with_tcp_listen(
+         addr: SocketAddr,
+         cids: Arc<AtomicU64>,
+@@ -169,6 +185,7 @@ impl Protocols {
+         Ok(())
+     }
+ 
++    #[cfg(not(target_arch = "wasm32"))]
+     pub(crate) fn new_tcp(stream: net::TcpStream, metrics: ProtocolMetricCache) -> Self {
+         let (r, w) = stream.into_split();
+         let sp = TcpSendProtocol::new(TcpDrain { half: w }, metrics.clone());
+@@ -182,6 +199,28 @@ impl Protocols {
+         Protocols::Tcp((sp, rp))
+     }
+ 
++    #[cfg(target_arch = "wasm32")]
++    pub(crate) async fn with_ws_connect(
++        url: &str,
++        metrics: ProtocolMetricCache,
++    ) -> Result<Self, NetworkConnectError> {
++        let (drain, sink) = ws::connect(url).await.map_err(|e| {
++            NetworkConnectError::Io(io::Error::new(io::ErrorKind::Other, format!("ws: {e:?}")))
++        })?;
++        Ok(Self::new_ws(drain, sink, metrics))
++    }
++
++    #[cfg(target_arch = "wasm32")]
++    pub(crate) fn new_ws(
++        drain: WsDrain,
++        sink: WsSink,
++        metrics: ProtocolMetricCache,
++    ) -> Self {
++        let sp = TcpSendProtocol::new(drain, metrics.clone());
++        let rp = TcpRecvProtocol::new(sink, metrics);
++        Protocols::Ws((sp, rp))
++    }
++
+     pub(crate) async fn with_mpsc_connect(
+         addr: u64,
+         metrics: ProtocolMetricCache,
+@@ -397,7 +436,10 @@ impl Protocols {
+ 
+     pub(crate) fn split(self) -> (SendProtocols, RecvProtocols) {
+         match self {
++            #[cfg(not(target_arch = "wasm32"))]
+             Protocols::Tcp((s, r)) => (SendProtocols::Tcp(s), RecvProtocols::Tcp(r)),
++            #[cfg(target_arch = "wasm32")]
++            Protocols::Ws((s, r)) => (SendProtocols::Ws(s), RecvProtocols::Ws(r)),
+             Protocols::Mpsc((s, r)) => (SendProtocols::Mpsc(s), RecvProtocols::Mpsc(r)),
+             #[cfg(feature = "quic")]
+             Protocols::Quic((s, r)) => (SendProtocols::Quic(s), RecvProtocols::Quic(r)),
+@@ -416,7 +458,10 @@ impl network_protocol::InitProtocol for Protocols {
+         secret: u128,
+     ) -> Result<(Pid, Sid, u128), InitProtocolError<Self::CustomErr>> {
+         match self {
++            #[cfg(not(target_arch = "wasm32"))]
+             Protocols::Tcp(p) => p.initialize(initializer, local_pid, secret).await,
++            #[cfg(target_arch = "wasm32")]
++            Protocols::Ws(p) => p.initialize(initializer, local_pid, secret).await,
+             Protocols::Mpsc(p) => p.initialize(initializer, local_pid, secret).await,
+             #[cfg(feature = "quic")]
+             Protocols::Quic(p) => p.initialize(initializer, local_pid, secret).await,
+@@ -430,7 +475,10 @@ impl network_protocol::SendProtocol for SendProtocols {
+ 
+     fn notify_from_recv(&mut self, event: ProtocolEvent) {
+         match self {
++            #[cfg(not(target_arch = "wasm32"))]
+             SendProtocols::Tcp(s) => s.notify_from_recv(event),
++            #[cfg(target_arch = "wasm32")]
++            SendProtocols::Ws(s) => s.notify_from_recv(event),
+             SendProtocols::Mpsc(s) => s.notify_from_recv(event),
+             #[cfg(feature = "quic")]
+             SendProtocols::Quic(s) => s.notify_from_recv(event),
+@@ -439,7 +487,10 @@ impl network_protocol::SendProtocol for SendProtocols {
+ 
+     async fn send(&mut self, event: ProtocolEvent) -> Result<(), ProtocolError<Self::CustomErr>> {
+         match self {
++            #[cfg(not(target_arch = "wasm32"))]
+             SendProtocols::Tcp(s) => s.send(event).await,
++            #[cfg(target_arch = "wasm32")]
++            SendProtocols::Ws(s) => s.send(event).await,
+             SendProtocols::Mpsc(s) => s.send(event).await,
+             #[cfg(feature = "quic")]
+             SendProtocols::Quic(s) => s.send(event).await,
+@@ -452,7 +503,10 @@ impl network_protocol::SendProtocol for SendProtocols {
+         dt: Duration,
+     ) -> Result<Bandwidth, ProtocolError<Self::CustomErr>> {
+         match self {
++            #[cfg(not(target_arch = "wasm32"))]
+             SendProtocols::Tcp(s) => s.flush(bandwidth, dt).await,
++            #[cfg(target_arch = "wasm32")]
++            SendProtocols::Ws(s) => s.flush(bandwidth, dt).await,
+             SendProtocols::Mpsc(s) => s.flush(bandwidth, dt).await,
+             #[cfg(feature = "quic")]
+             SendProtocols::Quic(s) => s.flush(bandwidth, dt).await,
+@@ -466,7 +520,10 @@ impl network_protocol::RecvProtocol for RecvProtocols {
+ 
+     async fn recv(&mut self) -> Result<ProtocolEvent, ProtocolError<Self::CustomErr>> {
+         match self {
++            #[cfg(not(target_arch = "wasm32"))]
+             RecvProtocols::Tcp(r) => r.recv().await,
++            #[cfg(target_arch = "wasm32")]
++            RecvProtocols::Ws(r) => r.recv().await,
+             RecvProtocols::Mpsc(r) => r.recv().await,
+             #[cfg(feature = "quic")]
+             RecvProtocols::Quic(r) => r.recv().await,
+@@ -497,22 +554,27 @@ pub enum ProtocolsError {
+     Udp(io::Error),
+     #[cfg(feature = "quic")]
+     Quic(QuicError),
++    #[cfg(target_arch = "wasm32")]
++    Ws(WsError),
+     Mpsc(MpscError),
+ }
+ 
+ ///////////////////////////////////////
+ // TCP
++#[cfg(not(target_arch = "wasm32"))]
+ #[derive(Debug)]
+ pub struct TcpDrain {
+     half: OwnedWriteHalf,
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ #[derive(Debug)]
+ pub struct TcpSink {
+     half: OwnedReadHalf,
+     buffer: BytesMut,
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ #[async_trait]
+ impl UnreliableDrain for TcpDrain {
+     type CustomErr = ProtocolsError;
+@@ -526,6 +588,7 @@ impl UnreliableDrain for TcpDrain {
+     }
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ #[async_trait]
+ impl UnreliableSink for TcpSink {
+     type CustomErr = ProtocolsError;
+@@ -546,6 +609,108 @@ impl UnreliableSink for TcpSink {
+     }
+ }
+ 
++///////////////////////////////////////
++// WebSocket (wasm)
++#[cfg(target_arch = "wasm32")]
++#[derive(Debug)]
++pub struct WsDrain {
++    tx: futures_channel::mpsc::UnboundedSender<BytesMut>,
++}
++
++#[cfg(target_arch = "wasm32")]
++#[derive(Debug)]
++pub struct WsSink {
++    rx: futures_channel::mpsc::UnboundedReceiver<BytesMut>,
++}
++
++#[cfg(target_arch = "wasm32")]
++#[derive(Debug)]
++pub struct WsError(pub String);
++
++#[cfg(target_arch = "wasm32")]
++#[async_trait]
++impl UnreliableDrain for WsDrain {
++    type CustomErr = ProtocolsError;
++    type DataFormat = BytesMut;
++
++    async fn send(&mut self, data: Self::DataFormat) -> Result<(), ProtocolError<Self::CustomErr>> {
++        self.tx.unbounded_send(data).map_err(|_| {
++            ProtocolError::Custom(ProtocolsError::Ws(WsError("drain closed".into())))
++        })
++    }
++}
++
++#[cfg(target_arch = "wasm32")]
++#[async_trait]
++impl UnreliableSink for WsSink {
++    type CustomErr = ProtocolsError;
++    type DataFormat = BytesMut;
++
++    async fn recv(&mut self) -> Result<Self::DataFormat, ProtocolError<Self::CustomErr>> {
++        use futures_util::StreamExt;
++        self.rx
++            .next()
++            .await
++            .ok_or(ProtocolError::Custom(ProtocolsError::Ws(WsError("sink closed".into()))))
++    }
++}
++
++#[cfg(target_arch = "wasm32")]
++mod ws {
++    use super::*;
++    use futures_channel::oneshot;
++    use futures_util::future::{self, Either};
++    use futures_util::StreamExt;
++    use wasm_bindgen::prelude::*;
++    use wasm_bindgen::JsCast;
++    use wasm_bindgen_futures::spawn_local;
++
++    pub(super) async fn connect(url: &str) -> Result<(WsDrain, WsSink), JsValue> {
++        let ws = web_sys::WebSocket::new(url)?;
++        ws.set_binary_type(web_sys::BinaryType::Arraybuffer);
++
++        let (open_tx, open_rx) = oneshot::channel::<()>();
++        let onopen = Closure::once_into_js(move || {
++            let _ = open_tx.send(());
++        });
++        ws.set_onopen(Some(onopen.unchecked_ref()));
++        let (err_tx, err_rx) = oneshot::channel::<String>();
++        let onerror = Closure::once_into_js(move || {
++            let _ = err_tx.send("websocket error before open".into());
++        });
++        ws.set_onerror(Some(onerror.unchecked_ref()));
++
++        futures_util::pin_mut!(open_rx, err_rx);
++        match future::select(open_rx, err_rx).await {
++            Either::Left(_) => {},
++            Either::Right((e, _)) => return Err(JsValue::from_str(&e.unwrap_or_default())),
++        }
++
++        let (out_tx, mut out_rx) = futures_channel::mpsc::unbounded::<BytesMut>();
++        let (in_tx, in_rx) = futures_channel::mpsc::unbounded::<BytesMut>();
++
++        let onmessage =
++            Closure::<dyn FnMut(web_sys::MessageEvent)>::new(move |e: web_sys::MessageEvent| {
++                if let Ok(buf) = e.data().dyn_into::<js_sys::ArrayBuffer>() {
++                    let arr = js_sys::Uint8Array::new(&buf);
++                    let _ = in_tx.unbounded_send(BytesMut::from(&arr.to_vec()[..]));
++                }
++            });
++        ws.set_onmessage(Some(onmessage.as_ref().unchecked_ref()));
++        onmessage.forget();
++
++        let ws_out = ws.clone();
++        spawn_local(async move {
++            while let Some(data) = out_rx.next().await {
++                let arr = js_sys::Uint8Array::from(&data[..]);
++                let _ = ws_out.send_with_array_buffer(&arr.buffer());
++            }
++        });
++
++        Ok((WsDrain { tx: out_tx }, WsSink { rx: in_rx }))
++    }
++}
++
+ ///////////////////////////////////////
+ // MPSC
+ #[derive(Debug)]
+diff --git a/network/src/lib.rs b/network/src/lib.rs
+index efbaed3..37127ef 100644
+--- a/network/src/lib.rs
++++ b/network/src/lib.rs
+@@ -103,6 +103,7 @@ mod channel;
+ mod message;
+ mod metrics;
+ mod participant;
++mod rt;
+ mod scheduler;
+ mod util;
+ 
+diff --git a/network/src/participant.rs b/network/src/participant.rs
+index 90a3847..38650ac 100644
+--- a/network/src/participant.rs
++++ b/network/src/participant.rs
+@@ -16,12 +16,15 @@ use std::{
+         Arc,
+         atomic::{AtomicBool, AtomicI32, Ordering},
+     },
+-    time::{Duration, Instant},
++    time::Duration,
+ };
++#[cfg(target_arch = "wasm32")]
++use web_time::Instant;
++#[cfg(not(target_arch = "wasm32"))]
++use std::time::Instant;
+ use tokio::{
+     select,
+     sync::{Mutex, RwLock, mpsc, oneshot, watch},
+-    task::JoinHandle,
+ };
+ use tokio_stream::wrappers::UnboundedReceiverStream;
+ use tracing::*;
+@@ -205,31 +208,48 @@ impl BParticipant {
+     }
+ 
+     fn best_protocol(all: &SortedVec<Cid, SendProtocols>, promises: Promises) -> Option<Cid> {
+-        // check for mpsc
+         all.data.iter().find(|(_, p)| matches!(p, SendProtocols::Mpsc(_))).map(|(c, _)| *c).or_else(
+-            || if network_protocol::TcpSendProtocol::<crate::channel::TcpDrain>::supported_promises()
+-                .contains(promises)
+-            {
+-                // check for tcp
+-                all.data.iter().find(|(_, p)| matches!(p, SendProtocols::Tcp(_))).map(|(c, _)| *c)
+-            } else {
+-                None
+-            }
+-        ).or_else(
+-            // check for quic, TODO: evaluate to order quic BEFORE tcp once its stable
+-            || if network_protocol::QuicSendProtocol::<crate::channel::QuicDrain>::supported_promises()
+-                .contains(promises)
+-            {
+-                all.data.iter().find(|(_, p)| matches!(p, SendProtocols::Quic(_))).map(|(c, _)| *c)
+-            } else {
++            || {
++                #[cfg(not(target_arch = "wasm32"))]
++                if network_protocol::TcpSendProtocol::<crate::channel::TcpDrain>::supported_promises()
++                    .contains(promises)
++                {
++                    return all
++                        .data
++                        .iter()
++                        .find(|(_, p)| matches!(p, SendProtocols::Tcp(_)))
++                        .map(|(c, _)| *c);
++                };
++                #[cfg(target_arch = "wasm32")]
++                if network_protocol::TcpSendProtocol::<crate::channel::WsDrain>::supported_promises()
++                    .contains(promises)
++                {
++                    return all
++                        .data
++                        .iter()
++                        .find(|(_, p)| matches!(p, SendProtocols::Ws(_)))
++                        .map(|(c, _)| *c);
++                };
+                 None
+-            }
++            },
+         ).or_else(
+             || {
+-                warn!("couldn't satisfy promises");
+-                all.data.first().map(|(c, _)| *c)
+-            }
+-        )
++                #[cfg(feature = "quic")]
++                if network_protocol::QuicSendProtocol::<crate::channel::QuicDrain>::supported_promises()
++                    .contains(promises)
++                {
++                    return all
++                        .data
++                        .iter()
++                        .find(|(_, p)| matches!(p, SendProtocols::Quic(_)))
++                        .map(|(c, _)| *c);
++                };
++                None
++            },
++        ).or_else(|| {
++            warn!("couldn't satisfy promises");
++            all.data.first().map(|(c, _)| *c)
++        })
+     }
+ 
+     //TODO: local stream_cid: HashMap<Sid, Cid> to know the respective protocol
+@@ -254,7 +274,7 @@ impl BParticipant {
+     ) {
+         let mut sorted_send_protocols = SortedVec::<Cid, SendProtocols>::default();
+         let mut sorted_stream_protocols = SortedVec::<Sid, Cid>::default();
+-        let mut interval = tokio::time::interval(Self::TICK_TIME);
++        let mut interval = crate::rt::Interval::new(Self::TICK_TIME);
+         let mut last_instant = Instant::now();
+         let mut stream_ids = self.offset_sid;
+         let mut part_bandwidth = 0.0f32;
+@@ -279,7 +299,7 @@ impl BParticipant {
+             //verify that we have at LEAST 1 channel before continuing
+             if sorted_send_protocols.data.is_empty() {
+                 warn!("no channel");
+-                tokio::time::sleep(Self::TICK_TIME * 1000).await; //TODO: failover
++                crate::rt::sleep(Self::TICK_TIME * 1000).await; //TODO: failover
+                 continue;
+             }
+ 
+@@ -452,20 +472,20 @@ impl BParticipant {
+         )>,
+         b2b_notify_send_of_recv_close_s: crossbeam_channel::Sender<(Cid, Sid)>,
+     ) {
+-        let mut recv_protocols: HashMap<Cid, JoinHandle<()>> = HashMap::new();
++        let mut recv_protocols: HashMap<Cid, crate::rt::Task> = HashMap::new();
+         // we should be able to directly await futures imo
+         let (hacky_recv_s, mut hacky_recv_r) = mpsc::unbounded_channel();
+ 
+         let retrigger = |cid: Cid, mut p: RecvProtocols, map: &mut HashMap<_, _>| {
+             let hacky_recv_s = hacky_recv_s.clone();
+-            let handle = tokio::spawn(async move {
++            let handle = crate::rt::spawn(async move {
+                 let r = p.recv().await;
+                 let _ = hacky_recv_s.send((cid, r, p)); // ignoring failed
+             });
+             map.insert(cid, handle);
+         };
+ 
+-        let remove_c = |recv_protocols: &mut HashMap<Cid, JoinHandle<()>>, cid: &Cid| {
++        let remove_c = |recv_protocols: &mut HashMap<Cid, crate::rt::Task>, cid: &Cid| {
+             match recv_protocols.remove(cid) {
+                 Some(h) => {
+                     h.abort();
+@@ -527,7 +547,7 @@ impl BParticipant {
+                                 self.output_limit,
+                             )
+                             .await;
+-                        b2a_stream_opened_s.send(stream).unwrap();
++                        let _ = b2a_stream_opened_s.send(stream);
+                         retrigger(cid, p, &mut recv_protocols);
+                     },
+                     Ok(ProtocolEvent::CloseStream { sid }) => {
+@@ -671,7 +691,7 @@ impl BParticipant {
+                     break;
+                 }
+                 sleep *= 1.4;
+-                tokio::time::sleep(Duration::from_secs_f64(sleep)).await;
++                crate::rt::sleep(Duration::from_secs_f64(sleep)).await;
+                 if sleep > 0.2 {
+                     trace!(?bytes, "wait for mgr to close");
+                 }
+@@ -705,7 +725,7 @@ impl BParticipant {
+         drop(lock);
+ 
+         trace!("wait for other managers");
+-        let timeout = tokio::time::sleep(
++        let timeout = crate::rt::sleep(
+             awaited
+                 .as_ref()
+                 .map(|(timeout_time, _)| *timeout_time)
+diff --git a/network/src/rt.rs b/network/src/rt.rs
+new file mode 100644
+index 0000000..82838ad
+--- /dev/null
++++ b/network/src/rt.rs
+@@ -0,0 +1,56 @@
++use std::future::Future;
++use std::time::Duration;
++
++#[cfg(not(target_arch = "wasm32"))]
++pub(crate) struct Task(tokio::task::JoinHandle<()>);
++
++#[cfg(target_arch = "wasm32")]
++pub(crate) struct Task;
++
++impl Task {
++    pub(crate) fn abort(&self) {
++        #[cfg(not(target_arch = "wasm32"))]
++        self.0.abort();
++    }
++}
++
++#[cfg(not(target_arch = "wasm32"))]
++pub(crate) fn spawn<F>(fut: F) -> Task
++where
++    F: Future<Output = ()> + Send + 'static,
++{
++    Task(tokio::spawn(fut))
++}
++
++#[cfg(target_arch = "wasm32")]
++pub(crate) fn spawn<F>(fut: F) -> Task
++where
++    F: Future<Output = ()> + 'static,
++{
++    wasm_bindgen_futures::spawn_local(fut);
++    Task
++}
++
++#[cfg(not(target_arch = "wasm32"))]
++pub(crate) async fn sleep(d: Duration) {
++    tokio::time::sleep(d).await;
++}
++
++#[cfg(target_arch = "wasm32")]
++pub(crate) async fn sleep(d: Duration) {
++    gloo_timers::future::TimeoutFuture::new(d.as_millis() as u32).await;
++}
++
++pub(crate) struct Interval {
++    period: Duration,
++}
++
++impl Interval {
++    pub(crate) fn new(period: Duration) -> Self {
++        Self { period }
++    }
++
++    pub(crate) async fn tick(&mut self) {
++        sleep(self.period).await;
++    }
++}
+diff --git a/network/src/scheduler.rs b/network/src/scheduler.rs
+index 3785e1f..9800f18 100644
+--- a/network/src/scheduler.rs
++++ b/network/src/scheduler.rs
+@@ -190,6 +190,7 @@ impl Scheduler {
+                     mcache.inc();
+ 
+                     let res = match address {
++                        #[cfg(not(target_arch = "wasm32"))]
+                         ListenAddr::Tcp(addr) => {
+                             Protocols::with_tcp_listen(
+                                 addr,
+@@ -243,7 +244,10 @@ impl Scheduler {
+                 ProtocolMetricCache::new(&cid.to_string(), Arc::clone(&self.protocol_metrics));
+             self.metrics.connect_request(&addr);
+             let protocol = match addr.clone() {
++                #[cfg(not(target_arch = "wasm32"))]
+                 ConnectAddr::Tcp(addr) => Protocols::with_tcp_connect(addr, metrics).await,
++                #[cfg(target_arch = "wasm32")]
++                ConnectAddr::Ws(url) => Protocols::with_ws_connect(&url, metrics).await,
+                 #[cfg(feature = "quic")]
+                 ConnectAddr::Quic(addr, ref config, name) => {
+                     Protocols::with_quic_connect(addr, config.clone(), name, metrics).await
+@@ -400,7 +404,7 @@ impl Scheduler {
+         let local_secret = self.local_secret;
+         let output_limit = self.output_limit;
+         // this is necessary for UDP to work at all and to remove code duplication
+-        tokio::spawn(
++        crate::rt::spawn(
+             async move {
+                 trace!(?cid, "Open channel and be ready for Handshake");
+                 use network_protocol::InitProtocol;
+@@ -454,7 +458,7 @@ impl Scheduler {
+                             drop(participants);
+                             trace!("dropped participants lock");
+                             let p = pid;
+-                            tokio::spawn(
++                            crate::rt::spawn(
+                                 bparticipant
+                                     .run(participant_channels.b2s_prio_statistic_s)
+                                     .instrument(info_span!("remote", ?p)),
+diff --git a/network/src/util.rs b/network/src/util.rs
+index 17d4f16..61bca1f 100644
+--- a/network/src/util.rs
++++ b/network/src/util.rs
+@@ -1,5 +1,9 @@
+ use core::hash::Hash;
+-use std::{collections::HashMap, time::Instant};
++use std::collections::HashMap;
++#[cfg(target_arch = "wasm32")]
++use web_time::Instant;
++#[cfg(not(target_arch = "wasm32"))]
++use std::time::Instant;
+ use tracing::Level;
+ 
+ /// used to collect multiple traces and not spam the console
+diff --git a/rtsim/Cargo.toml b/rtsim/Cargo.toml
+index 7170c0c..2e33bb9 100644
+--- a/rtsim/Cargo.toml
++++ b/rtsim/Cargo.toml
+@@ -24,10 +24,15 @@ rand_chacha = { workspace = true }
+ fxhash = { workspace = true }
+ itertools = { workspace = true }
+ rayon = { workspace = true }
+-specs = { workspace = true, features = ["shred-derive"] }
+ take-once = "0.1.2"
+ num-traits = { workspace = true }
+ once_cell = { version = "1.21.3", optional = true }
+ 
+ [features]
+ airship_log = ["dep:once_cell"]
++
++[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
++specs = { workspace = true, features = ["shred-derive"] }
++
++[target.'cfg(target_arch = "wasm32")'.dependencies]
++specs = { version = "0.20", default-features = false, features = ["nightly", "shred-derive"] }
+diff --git a/rtsim/src/rule/npc_ai/mod.rs b/rtsim/src/rule/npc_ai/mod.rs
+index 3060e56..1dffaa6 100644
+--- a/rtsim/src/rule/npc_ai/mod.rs
++++ b/rtsim/src/rule/npc_ai/mod.rs
+@@ -74,6 +74,7 @@ use fxhash::FxHasher64;
+ use itertools::{Either, Itertools};
+ use rand::{prelude::*, seq::IndexedRandom};
+ use rand_chacha::ChaChaRng;
++#[cfg(not(target_arch = "wasm32"))]
+ use rayon::iter::{IntoParallelRefMutIterator, ParallelIterator};
+ use vek::*;
+ use world::{
+@@ -83,6 +84,19 @@ use world::{
+     util::NEIGHBORS,
+ };
+ 
++/// Serial stand-in for rayon's `par_iter_mut` on wasm (rtsim runs single-threaded there).
++#[cfg(target_arch = "wasm32")]
++trait SliceParIterMut {
++    type Item;
++    fn par_iter_mut(&mut self) -> std::slice::IterMut<'_, Self::Item>;
++}
++
++#[cfg(target_arch = "wasm32")]
++impl<T> SliceParIterMut for Vec<T> {
++    type Item = T;
++    fn par_iter_mut(&mut self) -> std::slice::IterMut<'_, T> { self.iter_mut() }
++}
++
+ use self::{
+     movement::{
+         follow_actor, goto, goto_2d, goto_2d_flying, goto_actor, travel_to_point, travel_to_site,
+diff --git a/voxygen/Cargo.toml b/voxygen/Cargo.toml
+index 1d34a5f..77deb45 100644
+--- a/voxygen/Cargo.toml
++++ b/voxygen/Cargo.toml
+@@ -33,7 +33,8 @@ tracy = ["common-frontend/tracy", "client/tracy", "wgpu-profiler/tracy"]
+ tracy-memory = ["tracy"]
+ plugins = ["client/plugins", "server/plugins", "anim/plugins", "common/plugins"]
+ egui-ui = ["voxygen-egui", "egui", "egui-wgpu", "egui-winit"]
+-shaderc-from-source = ["shaderc/build-from-source"]
++shaderc = ["dep:shaderc"]
++shaderc-from-source = ["shaderc", "shaderc/build-from-source"]
+ discord = ["discord-sdk"]
+ bin_cmd_doc_gen = []
+ 
+@@ -44,6 +45,7 @@ default-publish = [
+     "plugins",
+     "discord",
+     "simd",
++    "shaderc",
+ ]
+ default = ["default-publish", "hot-reloading", "shaderc-from-source", "egui-ui"]
+ 
+@@ -68,7 +70,7 @@ winit = { version = "0.30.12", features = ["serde"] }
+ wgpu = { version = "27", features = ["spirv", "glsl"] }
+ wgpu-profiler = "0.25"
+ bytemuck = { version = "1.7", features = ["derive"] }
+-shaderc = "0.10"
++shaderc = { version = "0.10", optional = true }
+ 
+ # Ui
+ conrod_core = { git = "https://gitlab.com/veloren/conrod.git", branch = "copypasta_0.7" }
+@@ -89,6 +91,7 @@ specs = { workspace = true, features = ["serde", "storage-event-control"] }
+ # Mathematics
+ vek = { workspace = true }
+ levenshtein = "1.0.5"
++web-time = "1"
+ 
+ # Controller
+ gilrs = { version = "0.11.0", features = ["serde-serialize"] }
+@@ -133,13 +136,11 @@ slab = { workspace = true }
+ strum = { workspace = true }
+ tracing = { workspace = true }
+ treeculler = "0.4"
+-tokio = { workspace = true, features = ["rt-multi-thread"] }
+ num_cpus = "1.0"
+ inline_tweak = { workspace = true }
+ itertools = { workspace = true }
+ sha2 = { workspace = true }
+ bitflags = { workspace = true, features = ["serde"] }
+-open = "5.3.2"
+ 
+ # Discord RPC
+ discord-sdk = { version = "0.4", optional = true }
+@@ -149,6 +150,18 @@ cpal = "0.18"
+ [target.'cfg(target_os = "macos")'.dependencies]
+ dispatch = "0.2"
+ 
++[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
++tokio = { workspace = true, features = ["rt-multi-thread"] }
++open = "5.3.2"
++
++[target.'cfg(target_arch = "wasm32")'.dependencies]
++tokio = { version = "1", default-features = false, features = ["sync", "macros", "rt", "time"] }
++wasm-bindgen = "0.2"
++wasm-bindgen-futures = "0.4"
++console_error_panic_hook = "0.1"
++web-sys = { version = "0.3", features = ["console", "Window", "Document", "Element", "HtmlCanvasElement"] }
++gloo-timers = { version = "0.3", features = ["futures"] }
++
+ [target.'cfg(target_family = "windows")'.build-dependencies]
+ winres = "0.1"
+ 
+@@ -156,7 +169,7 @@ winres = "0.1"
+ mimalloc = { workspace = true }
+ 
+ # Mumble
+-[target.'cfg(not(target_os="macos"))'.dependencies]
++[target.'cfg(all(not(target_os = "macos"), not(target_arch = "wasm32")))'.dependencies]
+ mumble-link = "0.2.0"
+ 
+ [dev-dependencies]
+diff --git a/voxygen/src/audio/ambience.rs b/voxygen/src/audio/ambience.rs
+index 5d1c887..de3a213 100644
+--- a/voxygen/src/audio/ambience.rs
++++ b/voxygen/src/audio/ambience.rs
+@@ -14,7 +14,8 @@ use common::{
+ use common_state::State;
+ use kira::Tween;
+ use serde::Deserialize;
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++use web_time::Instant;
+ use strum::IntoEnumIterator;
+ use tracing::warn;
+ use vek::*;
+diff --git a/voxygen/src/audio/mod.rs b/voxygen/src/audio/mod.rs
+index 21b082b..87285ea 100644
+--- a/voxygen/src/audio/mod.rs
++++ b/voxygen/src/audio/mod.rs
+@@ -532,12 +532,13 @@ impl AudioFrontend {
+             .unwrap_or_default()
+     }
+ 
++    #[cfg_attr(target_arch = "wasm32", allow(unused_variables))]
+     pub fn get_cpu_usage(&mut self) -> f32 {
++        #[cfg(not(target_arch = "wasm32"))]
+         if let Some(inner) = self.inner.as_mut() {
+-            inner.manager.backend_mut().pop_cpu_usage().unwrap_or(0.0)
+-        } else {
+-            0.0
++            return inner.manager.backend_mut().pop_cpu_usage().unwrap_or(0.0);
+         }
++        0.0
+     }
+ 
+     /// Play a music file with the given tag. Pass in the length of the track in
+diff --git a/voxygen/src/audio/sfx/event_mapper/block.rs b/voxygen/src/audio/sfx/event_mapper/block.rs
+index 6384438..2696235 100644
+--- a/voxygen/src/audio/sfx/event_mapper/block.rs
++++ b/voxygen/src/audio/sfx/event_mapper/block.rs
+@@ -13,7 +13,8 @@ use common_state::State;
+ use hashbrown::HashMap;
+ use rand::{RngExt, prelude::*, rng};
+ use rand_chacha::ChaCha8Rng;
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++use web_time::Instant;
+ use vek::*;
+ 
+ #[derive(Clone, PartialEq)]
+diff --git a/voxygen/src/audio/sfx/event_mapper/campfire.rs b/voxygen/src/audio/sfx/event_mapper/campfire.rs
+index da1f8e1..b35a59a 100644
+--- a/voxygen/src/audio/sfx/event_mapper/campfire.rs
++++ b/voxygen/src/audio/sfx/event_mapper/campfire.rs
+@@ -15,7 +15,8 @@ use common::{
+ use common_state::State;
+ use hashbrown::HashMap;
+ use specs::{Entity as EcsEntity, Join, WorldExt};
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++use web_time::Instant;
+ 
+ #[derive(Clone)]
+ struct PreviousEntityState {
+diff --git a/voxygen/src/audio/sfx/event_mapper/combat/mod.rs b/voxygen/src/audio/sfx/event_mapper/combat/mod.rs
+index 1b42d9f..d130416 100644
+--- a/voxygen/src/audio/sfx/event_mapper/combat/mod.rs
++++ b/voxygen/src/audio/sfx/event_mapper/combat/mod.rs
+@@ -19,7 +19,8 @@ use common::{
+ use common_state::State;
+ use hashbrown::HashMap;
+ use specs::{Entity as EcsEntity, Join, LendJoin, WorldExt};
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++use web_time::Instant;
+ 
+ #[derive(Clone)]
+ struct PreviousEntityState {
+diff --git a/voxygen/src/audio/sfx/event_mapper/combat/tests.rs b/voxygen/src/audio/sfx/event_mapper/combat/tests.rs
+index c9914d5..5163b0c 100644
+--- a/voxygen/src/audio/sfx/event_mapper/combat/tests.rs
++++ b/voxygen/src/audio/sfx/event_mapper/combat/tests.rs
+@@ -7,7 +7,8 @@ use common::{
+     },
+     states,
+ };
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++use web_time::Instant;
+ 
+ #[test]
+ fn maps_wield_while_equipping() {
+diff --git a/voxygen/src/audio/sfx/event_mapper/movement/mod.rs b/voxygen/src/audio/sfx/event_mapper/movement/mod.rs
+index 424440e..1de6902 100644
+--- a/voxygen/src/audio/sfx/event_mapper/movement/mod.rs
++++ b/voxygen/src/audio/sfx/event_mapper/movement/mod.rs
+@@ -19,7 +19,8 @@ use common_state::State;
+ use hashbrown::HashMap;
+ use rand::prelude::*;
+ use specs::{Entity as EcsEntity, Join, LendJoin, WorldExt};
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++use web_time::Instant;
+ use vek::*;
+ 
+ #[derive(Clone)]
+diff --git a/voxygen/src/audio/sfx/event_mapper/movement/tests.rs b/voxygen/src/audio/sfx/event_mapper/movement/tests.rs
+index bf9b7c4..6982623 100644
+--- a/voxygen/src/audio/sfx/event_mapper/movement/tests.rs
++++ b/voxygen/src/audio/sfx/event_mapper/movement/tests.rs
+@@ -7,7 +7,8 @@ use common::{
+     states,
+     terrain::{Block, BlockKind},
+ };
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++use web_time::Instant;
+ 
+ #[test]
+ fn no_item_config_no_emit() {
+diff --git a/voxygen/src/audio/sfx/event_mapper/vehicle.rs b/voxygen/src/audio/sfx/event_mapper/vehicle.rs
+index c4d71d6..2fcdb9e 100644
+--- a/voxygen/src/audio/sfx/event_mapper/vehicle.rs
++++ b/voxygen/src/audio/sfx/event_mapper/vehicle.rs
+@@ -18,7 +18,8 @@ use common::{
+ use common_state::State;
+ use hashbrown::HashMap;
+ use specs::{Entity as EcsEntity, Join, WorldExt};
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++use web_time::Instant;
+ 
+ #[derive(Clone)]
+ struct PreviousEntityState {
+diff --git a/voxygen/src/audio/soundcache.rs b/voxygen/src/audio/soundcache.rs
+index 4d0d31c..c37bc8b 100644
+--- a/voxygen/src/audio/soundcache.rs
++++ b/voxygen/src/audio/soundcache.rs
+@@ -4,17 +4,17 @@ use common::assets::{AssetExt, BoxedError, FileAsset};
+ use kira::{
+     Decibels, StartTime, Tween, Value,
+     sound::{
+-        FromFileError, IntoOptionalRegion, PlaybackState, SoundData,
++        IntoOptionalRegion, PlaybackState, SoundData,
+         static_sound::{StaticSoundData, StaticSoundHandle},
+-        streaming::{StreamingSoundData, StreamingSoundHandle},
+     },
+ };
+-use std::{
+-    borrow::Cow,
+-    io::{self, Cursor},
+-    sync::Arc,
+-};
+-use tracing::warn;
++#[cfg(not(target_arch = "wasm32"))]
++use kira::sound::FromFileError;
++#[cfg(not(target_arch = "wasm32"))]
++use kira::sound::streaming::{StreamingSoundData, StreamingSoundHandle};
++#[cfg(not(target_arch = "wasm32"))]
++use std::sync::Arc;
++use std::{borrow::Cow, io};
+ 
+ // Kira does not provide a generic interface over sound data and sound handles,
+ // but we want to use both streaming and static sound data for music and sfx.
+@@ -24,12 +24,14 @@ use tracing::warn;
+ 
+ pub enum AnySoundData {
+     Static(StaticSoundData),
++    #[cfg(not(target_arch = "wasm32"))]
+     Streaming(StreamingSoundData<FromFileError>),
+ }
+ 
+ #[derive(Debug)]
+ pub enum AnySoundError {
+     Static(<StaticSoundData as SoundData>::Error),
++    #[cfg(not(target_arch = "wasm32"))]
+     Streaming(<StreamingSoundData<FromFileError> as SoundData>::Error),
+ }
+ 
+@@ -42,6 +44,7 @@ impl SoundData for AnySoundData {
+             AnySoundData::Static(data) => <StaticSoundData as SoundData>::into_sound(data)
+                 .map(|(sound, handle)| (sound, AnySoundHandle::Static(handle)))
+                 .map_err(AnySoundError::Static),
++            #[cfg(not(target_arch = "wasm32"))]
+             AnySoundData::Streaming(data) => {
+                 <StreamingSoundData<FromFileError> as SoundData>::into_sound(data)
+                     .map(|(sound, handle)| (sound, AnySoundHandle::Streaming(handle)))
+@@ -55,6 +58,7 @@ impl AnySoundData {
+     pub fn fade_in_tween(self, fade_in_tween: impl Into<Option<Tween>>) -> Self {
+         match self {
+             AnySoundData::Static(d) => AnySoundData::Static(d.fade_in_tween(fade_in_tween)),
++            #[cfg(not(target_arch = "wasm32"))]
+             AnySoundData::Streaming(d) => AnySoundData::Streaming(d.fade_in_tween(fade_in_tween)),
+         }
+     }
+@@ -62,6 +66,7 @@ impl AnySoundData {
+     pub fn start_time(self, start_time: impl Into<StartTime>) -> Self {
+         match self {
+             AnySoundData::Static(d) => AnySoundData::Static(d.start_time(start_time)),
++            #[cfg(not(target_arch = "wasm32"))]
+             AnySoundData::Streaming(d) => AnySoundData::Streaming(d.start_time(start_time)),
+         }
+     }
+@@ -69,6 +74,7 @@ impl AnySoundData {
+     pub fn volume(self, volume: impl Into<Value<Decibels>>) -> Self {
+         match self {
+             AnySoundData::Static(d) => AnySoundData::Static(d.volume(volume)),
++            #[cfg(not(target_arch = "wasm32"))]
+             AnySoundData::Streaming(d) => AnySoundData::Streaming(d.volume(volume)),
+         }
+     }
+@@ -76,6 +82,7 @@ impl AnySoundData {
+     pub fn loop_region(self, loop_region: impl IntoOptionalRegion) -> Self {
+         match self {
+             AnySoundData::Static(d) => AnySoundData::Static(d.loop_region(loop_region)),
++            #[cfg(not(target_arch = "wasm32"))]
+             AnySoundData::Streaming(d) => AnySoundData::Streaming(d.loop_region(loop_region)),
+         }
+     }
+@@ -84,6 +91,7 @@ impl AnySoundData {
+ #[derive(Debug)]
+ pub enum AnySoundHandle {
+     Static(StaticSoundHandle),
++    #[cfg(not(target_arch = "wasm32"))]
+     Streaming(StreamingSoundHandle<FromFileError>),
+ }
+ 
+@@ -91,6 +99,7 @@ impl AnySoundHandle {
+     pub fn state(&self) -> PlaybackState {
+         match self {
+             AnySoundHandle::Static(h) => h.state(),
++            #[cfg(not(target_arch = "wasm32"))]
+             AnySoundHandle::Streaming(h) => h.state(),
+         }
+     }
+@@ -98,6 +107,7 @@ impl AnySoundHandle {
+     pub fn position(&self) -> f64 {
+         match self {
+             AnySoundHandle::Static(h) => h.position(),
++            #[cfg(not(target_arch = "wasm32"))]
+             AnySoundHandle::Streaming(h) => h.position(),
+         }
+     }
+@@ -105,6 +115,7 @@ impl AnySoundHandle {
+     pub fn set_volume(&mut self, volume: impl Into<Value<Decibels>>, tween: Tween) {
+         match self {
+             AnySoundHandle::Static(h) => h.set_volume(volume, tween),
++            #[cfg(not(target_arch = "wasm32"))]
+             AnySoundHandle::Streaming(h) => h.set_volume(volume, tween),
+         }
+     }
+@@ -112,6 +123,7 @@ impl AnySoundHandle {
+     pub fn stop(&mut self, tween: Tween) {
+         match self {
+             AnySoundHandle::Static(h) => h.stop(tween),
++            #[cfg(not(target_arch = "wasm32"))]
+             AnySoundHandle::Streaming(h) => h.stop(tween),
+         }
+     }
+@@ -119,6 +131,7 @@ impl AnySoundHandle {
+     pub fn set_loop_region(&mut self, loop_region: impl IntoOptionalRegion) {
+         match self {
+             AnySoundHandle::Static(h) => h.set_loop_region(loop_region),
++            #[cfg(not(target_arch = "wasm32"))]
+             AnySoundHandle::Streaming(h) => h.set_loop_region(loop_region),
+         }
+     }
+@@ -127,6 +140,7 @@ impl AnySoundHandle {
+ #[derive(Clone)]
+ struct OggSound(StaticSoundData);
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ #[derive(Clone)]
+ struct StreamedOggSound(Arc<[u8]>);
+ 
+@@ -139,6 +153,7 @@ impl FileAsset for OggSound {
+     }
+ }
+ 
++#[cfg(not(target_arch = "wasm32"))]
+ impl FileAsset for StreamedOggSound {
+     const EXTENSION: &'static str = "ogg";
+ 
+@@ -159,30 +174,31 @@ impl OggSound {
+ }
+ 
+ pub fn load_ogg(specifier: &str, streamed: bool) -> AnySoundData {
++    #[cfg(not(target_arch = "wasm32"))]
+     if streamed {
+-        match StreamedOggSound::load(specifier) {
+-            Ok(handle) => StreamingSoundData::from_cursor(Cursor::new(handle.cloned().0))
++        return match StreamedOggSound::load(specifier) {
++            Ok(handle) => StreamingSoundData::from_cursor(io::Cursor::new(handle.cloned().0))
+                 .map_or_else(
+                     |error| {
+-                        warn!(?error, "Error while creating streaming sound data");
++                        tracing::warn!(?error, "Error while creating streaming sound data");
+                         AnySoundData::Static(OggSound::empty().0)
+                     },
+                     AnySoundData::Streaming,
+                 ),
+ 
+             Err(error) => {
+-                warn!(?specifier, ?error, "Failed to load sound");
++                tracing::warn!(?specifier, ?error, "Failed to load sound");
+                 AnySoundData::Static(OggSound::empty().0)
+             },
+-        }
+-    } else {
+-        AnySoundData::Static(
+-            OggSound::load_or_insert_with(specifier, |error| {
+-                warn!(?specifier, ?error, "Failed to load sound");
+-                OggSound::empty()
+-            })
+-            .cloned()
+-            .0,
+-        )
++        };
+     }
++    let _ = streamed;
++    AnySoundData::Static(
++        OggSound::load_or_insert_with(specifier, |error| {
++            tracing::warn!(?specifier, ?error, "Failed to load sound");
++            OggSound::empty()
++        })
++        .cloned()
++        .0,
++    )
+ }
+diff --git a/voxygen/src/cmd.rs b/voxygen/src/cmd.rs
+index 4ba9086..0053aee 100644
+--- a/voxygen/src/cmd.rs
++++ b/voxygen/src/cmd.rs
+@@ -760,14 +760,22 @@ fn handle_wiki(
+         format!("https://wiki.veloren.net/w/index.php?search={query_string}")
+     };
+ 
+-    open::that_detached(url)
+-        .map(|_| Some(Content::localized("command-wiki-success")))
+-        .map_err(|e| {
+-            Content::localized_with_args("command-wiki-fail", [(
+-                "error",
+-                LocalizationArg::from(e.to_string()),
+-            )])
+-        })
++    #[cfg(not(target_arch = "wasm32"))]
++    {
++        open::that_detached(url)
++            .map(|_| Some(Content::localized("command-wiki-success")))
++            .map_err(|e| {
++                Content::localized_with_args("command-wiki-fail", [(
++                    "error",
++                    LocalizationArg::from(e.to_string()),
++                )])
++            })
++    }
++    #[cfg(target_arch = "wasm32")]
++    {
++        let _ = url;
++        Ok(Some(Content::localized("command-wiki-success")))
++    }
+ }
+ 
+ /// Handles [`ClientChatCommand::ResetTutorial`]
+diff --git a/voxygen/src/hud/mod.rs b/voxygen/src/hud/mod.rs
+index 1f45d6b..014d880 100755
+--- a/voxygen/src/hud/mod.rs
++++ b/voxygen/src/hud/mod.rs
+@@ -144,8 +144,9 @@ use std::{
+     collections::VecDeque,
+     rc::Rc,
+     sync::Arc,
+-    time::{Duration, Instant},
++    time::Duration,
+ };
++use web_time::Instant;
+ use tracing::{instrument, trace, warn};
+ use vek::*;
+ 
+diff --git a/voxygen/src/hud/popup.rs b/voxygen/src/hud/popup.rs
+index c69f089..25f5c29 100644
+--- a/voxygen/src/hud/popup.rs
++++ b/voxygen/src/hud/popup.rs
+@@ -7,7 +7,8 @@ use conrod_core::{
+     widget_ids,
+ };
+ use i18n::Localization;
+-use std::{collections::VecDeque, time::Instant};
++use std::collections::VecDeque;
++use web_time::Instant;
+ 
+ widget_ids! {
+     struct Ids {
+diff --git a/voxygen/src/hud/quest.rs b/voxygen/src/hud/quest.rs
+index 9b753a9..eb2660f 100644
+--- a/voxygen/src/hud/quest.rs
++++ b/voxygen/src/hud/quest.rs
+@@ -1,3 +1,4 @@
++use web_time::Instant;
+ use client::{Client, EcsEntity};
+ use common::{
+     comp::{self, ItemKey},
+@@ -12,7 +13,7 @@ use i18n::Localization;
+ use specs::WorldExt;
+ use std::{
+     borrow::Cow,
+-    time::{Duration, Instant},
++    time::Duration,
+ };
+ 
+ use crate::{
+diff --git a/voxygen/src/hud/social.rs b/voxygen/src/hud/social.rs
+index 08c3eac..b48f776 100644
+--- a/voxygen/src/hud/social.rs
++++ b/voxygen/src/hud/social.rs
+@@ -16,7 +16,7 @@ use conrod_core::{
+ };
+ use i18n::Localization;
+ use itertools::Itertools;
+-use std::time::Instant;
++use web_time::Instant;
+ use vek::{Vec2, approx::AbsDiffEq};
+ 
+ widget_ids! {
+diff --git a/voxygen/src/lib.rs b/voxygen/src/lib.rs
+index 3d5f777..be05b0c 100644
+--- a/voxygen/src/lib.rs
++++ b/voxygen/src/lib.rs
+@@ -32,6 +32,8 @@ pub mod session;
+ pub mod settings;
+ #[cfg(feature = "singleplayer")]
+ pub mod singleplayer;
++#[cfg(target_arch = "wasm32")]
++pub mod web;
+ pub mod window;
+ 
+ #[cfg(feature = "singleplayer")]
+diff --git a/voxygen/src/menu/main/client_init.rs b/voxygen/src/menu/main/client_init.rs
+index 1590791..bb0d030 100644
+--- a/voxygen/src/menu/main/client_init.rs
++++ b/voxygen/src/menu/main/client_init.rs
+@@ -11,8 +11,10 @@ use std::{
+         Arc,
+         atomic::{AtomicBool, Ordering},
+     },
+-    time::Duration,
+ };
++#[cfg(not(target_arch = "wasm32"))]
++use std::time::Duration;
++#[cfg(not(target_arch = "wasm32"))]
+ use tokio::runtime;
+ use tracing::{trace, warn};
+ 
+@@ -45,6 +47,7 @@ pub struct ClientInit {
+     cancel: Arc<AtomicBool>,
+ }
+ impl ClientInit {
++    #[cfg(not(target_arch = "wasm32"))]
+     pub fn new(
+         connection_args: ConnectionArgs,
+         username: String,
+@@ -63,70 +66,57 @@ impl ClientInit {
+         let runtime2 = Arc::clone(&runtime);
+         let config_dir = config_dir.to_path_buf();
+ 
+-        runtime.spawn(async move {
+-            let trust_fn = |auth_server: &str| {
+-                let _ = tx.send(Msg::IsAuthTrusted(auth_server.to_string()));
+-                trust_rx
+-                    .recv()
+-                    .map(|AuthTrust(server, trust)| trust && server == *auth_server)
+-                    .unwrap_or(false)
+-            };
+-
+-            let mut last_err = None;
+-
+-            const FOUR_MINUTES_RETRIES: u64 = 48;
+-            'tries: for _ in 0..FOUR_MINUTES_RETRIES {
+-                if cancel2.load(Ordering::Relaxed) {
+-                    break;
+-                }
+-                let mut mismatched_server_info = None;
+-                match Client::new(
+-                    connection_args.clone(),
+-                    Arc::clone(&runtime2),
+-                    &mut mismatched_server_info,
+-                    &username,
+-                    &password,
+-                    locale.clone(),
+-                    trust_fn,
+-                    &|stage| {
+-                        let _ = init_stage_tx.send(stage);
+-                    },
+-                    crate::ecs::sys::add_local_systems,
+-                    config_dir.clone(),
+-                    client_type,
+-                )
+-                .await
+-                {
+-                    Ok(client) => {
+-                        let _ = tx.send(Msg::Done(Ok(client)));
+-                        tokio::task::block_in_place(move || drop(runtime2));
+-                        return;
+-                    },
+-                    Err(ClientError::NetworkErr(NetworkError::ConnectFailed(
+-                        NetworkConnectError::Io(e),
+-                    ))) => {
+-                        warn!(?e, "Failed to connect to the server. Retrying...");
+-                    },
+-                    Err(e) => {
+-                        trace!(?e, "Aborting server connection attempt");
+-                        last_err = Some(Error::ClientError {
+-                            error: e,
+-                            mismatched_server_info,
+-                        });
+-                        break 'tries;
+-                    },
+-                }
+-                tokio::time::sleep(Duration::from_secs(5)).await;
+-            }
+-
+-            // Parsing/host name resolution successful but no connection succeeded
+-            // If last_err is None this typically means there was no server up at the input
+-            // address and all the attempts timed out.
+-            let _ = tx.send(Msg::Done(Err(last_err.unwrap_or(Error::ServerNotFound))));
+-
+-            // Safe drop runtime
+-            tokio::task::block_in_place(move || drop(runtime2));
+-        });
++        runtime.spawn(run_init(
++            connection_args,
++            username,
++            password,
++            runtime2,
++            locale,
++            config_dir,
++            client_type,
++            tx,
++            trust_rx,
++            init_stage_tx,
++            cancel2,
++        ));
++
++        ClientInit {
++            rx,
++            stage_rx: init_stage_rx,
++            trust_tx,
++            cancel,
++        }
++    }
++
++    #[cfg(target_arch = "wasm32")]
++    pub fn new(
++        connection_args: ConnectionArgs,
++        username: String,
++        password: String,
++        locale: Option<String>,
++        config_dir: &Path,
++        client_type: ClientType,
++    ) -> Self {
++        let (tx, rx) = unbounded();
++        let (trust_tx, trust_rx) = unbounded();
++        let (init_stage_tx, init_stage_rx) = unbounded();
++        let cancel = Arc::new(AtomicBool::new(false));
++        let cancel2 = Arc::clone(&cancel);
++
++        let config_dir = config_dir.to_path_buf();
++
++        wasm_bindgen_futures::spawn_local(run_init(
++            connection_args,
++            username,
++            password,
++            locale,
++            config_dir,
++            client_type,
++            tx,
++            trust_rx,
++            init_stage_tx,
++            cancel2,
++        ));
+ 
+         ClientInit {
+             rx,
+@@ -161,3 +151,95 @@ impl ClientInit {
+ impl Drop for ClientInit {
+     fn drop(&mut self) { self.cancel(); }
+ }
++
++#[allow(clippy::too_many_arguments)]
++async fn run_init(
++    connection_args: ConnectionArgs,
++    username: String,
++    password: String,
++    #[cfg(not(target_arch = "wasm32"))] runtime2: Arc<runtime::Runtime>,
++    locale: Option<String>,
++    config_dir: std::path::PathBuf,
++    client_type: ClientType,
++    tx: Sender<Msg>,
++    trust_rx: Receiver<AuthTrust>,
++    init_stage_tx: Sender<ClientInitStage>,
++    cancel2: Arc<AtomicBool>,
++) {
++    let trust_fn = |auth_server: &str| -> bool {
++        #[cfg(target_arch = "wasm32")]
++        {
++            let _ = auth_server;
++            true
++        }
++        #[cfg(not(target_arch = "wasm32"))]
++        {
++            let _ = tx.send(Msg::IsAuthTrusted(auth_server.to_string()));
++            trust_rx
++                .recv()
++                .map(|AuthTrust(server, trust)| trust && server == *auth_server)
++                .unwrap_or(false)
++        }
++    };
++
++    let mut last_err = None;
++
++    const FOUR_MINUTES_RETRIES: u64 = 48;
++    'tries: for _ in 0..FOUR_MINUTES_RETRIES {
++        if cancel2.load(Ordering::Relaxed) {
++            break;
++        }
++        let mut mismatched_server_info = None;
++        match Client::new(
++            connection_args.clone(),
++            #[cfg(not(target_arch = "wasm32"))]
++            Arc::clone(&runtime2),
++            &mut mismatched_server_info,
++            &username,
++            &password,
++            locale.clone(),
++            trust_fn,
++            &|stage| {
++                let _ = init_stage_tx.send(stage);
++            },
++            crate::ecs::sys::add_local_systems,
++            config_dir.clone(),
++            client_type,
++        )
++        .await
++        {
++            Ok(client) => {
++                let _ = tx.send(Msg::Done(Ok(client)));
++                #[cfg(not(target_arch = "wasm32"))]
++                tokio::task::block_in_place(move || drop(runtime2));
++                return;
++            },
++            Err(ClientError::NetworkErr(NetworkError::ConnectFailed(
++                NetworkConnectError::Io(e),
++            ))) => {
++                warn!(?e, "Failed to connect to the server. Retrying...");
++            },
++            Err(e) => {
++                trace!(?e, "Aborting server connection attempt");
++                last_err = Some(Error::ClientError {
++                    error: e,
++                    mismatched_server_info,
++                });
++                break 'tries;
++            },
++        }
++        #[cfg(not(target_arch = "wasm32"))]
++        tokio::time::sleep(Duration::from_secs(5)).await;
++        #[cfg(target_arch = "wasm32")]
++        gloo_timers::future::TimeoutFuture::new(5000).await;
++    }
++
++    // Parsing/host name resolution successful but no connection succeeded
++    // If last_err is None this typically means there was no server up at the input
++    // address and all the attempts timed out.
++    let _ = tx.send(Msg::Done(Err(last_err.unwrap_or(Error::ServerNotFound))));
++
++    // Safe drop runtime
++    #[cfg(not(target_arch = "wasm32"))]
++    tokio::task::block_in_place(move || drop(runtime2));
++}
+diff --git a/voxygen/src/menu/main/mod.rs b/voxygen/src/menu/main/mod.rs
+index f25f95b..bc3dd94 100644
+--- a/voxygen/src/menu/main/mod.rs
++++ b/voxygen/src/menu/main/mod.rs
+@@ -424,6 +424,7 @@ impl PlayState for MainMenuState {
+                         .settings
+                         .save_to_file_warn(&global_state.config_dir);
+ 
++                    #[cfg(not(target_arch = "wasm32"))]
+                     let connection_args = if use_srv {
+                         ConnectionArgs::Srv {
+                             hostname: server_address,
+@@ -443,6 +444,11 @@ impl PlayState for MainMenuState {
+                             prefer_ipv6: false,
+                         }
+                     };
++                    #[cfg(target_arch = "wasm32")]
++                    let connection_args = {
++                        let _ = (use_srv, use_quic, validate_tls);
++                        ConnectionArgs::Ws(server_address)
++                    };
+                     attempt_login(
+                         &mut global_state.info_message,
+                         username,
+@@ -652,6 +658,7 @@ pub(crate) fn get_client_msg_error(
+         Error::NetworkErr(e) => net_error(e.to_string(), mismatched_server_info),
+         Error::ParticipantErr(e) => net_error(e.to_string(), mismatched_server_info),
+         Error::StreamErr(e) => net_error(e.to_string(), mismatched_server_info),
++        #[cfg(not(target_arch = "wasm32"))]
+         Error::RustlsErr(e) => net_error(e.to_string(), mismatched_server_info),
+         Error::HostnameLookupFailed(e) => {
+             format!(
+@@ -663,6 +670,7 @@ pub(crate) fn get_client_msg_error(
+         Error::Other(e) => {
+             format!("{}: {}", localization.get_msg("common-error"), e)
+         },
++        #[cfg(not(target_arch = "wasm32"))]
+         Error::AuthClientError(e) => match e {
+             // TODO: remove parentheses
+             client::AuthClientError::RequestError(e) => format!(
+@@ -716,6 +724,7 @@ fn get_client_init_msg_error(
+     }
+ }
+ 
++#[cfg_attr(target_arch = "wasm32", allow(unused_variables))]
+ fn attempt_login(
+     info_message: &mut Option<String>,
+     username: String,
+@@ -757,6 +766,7 @@ fn attempt_login(
+             connection_args,
+             username,
+             password,
++            #[cfg(not(target_arch = "wasm32"))]
+             Arc::clone(runtime),
+             locale,
+             config_dir,
+diff --git a/voxygen/src/render/error.rs b/voxygen/src/render/error.rs
+index 7e3f097..7ad8a74 100644
+--- a/voxygen/src/render/error.rs
++++ b/voxygen/src/render/error.rs
+@@ -7,7 +7,9 @@ pub enum RenderError {
+     CustomError(String),
+     CouldNotFindAdapter,
+     RequestAdapterError(wgpu::RequestAdapterError),
++    #[cfg(feature = "shaderc")]
+     ErrorInitializingShaderCCompiler(shaderc::Error),
++    #[cfg(feature = "shaderc")]
+     ShaderShaderCError(String, shaderc::Error),
+     ShaderWgpuError(String, wgpu::Error),
+ }
+@@ -32,10 +34,12 @@ impl fmt::Debug for RenderError {
+                 // Use Display formatting for this error since they have nice descriptions
+                 .field(&err.to_string())
+                 .finish(),
++            #[cfg(feature = "shaderc")]
+             Self::ErrorInitializingShaderCCompiler(err) => f
+                 .debug_tuple("ErrorInitializingShaderCCompiler")
+                 .field(err)
+                 .finish(),
++            #[cfg(feature = "shaderc")]
+             Self::ShaderShaderCError(shader_name, err) => write!(
+                 f,
+                 "\"{shader_name}\" shader failed to compile with shaderc due to the following \
+@@ -66,10 +70,12 @@ impl From<wgpu::RequestAdapterError> for RenderError {
+     fn from(err: wgpu::RequestAdapterError) -> Self { Self::RequestAdapterError(err) }
+ }
+ 
++#[cfg(feature = "shaderc")]
+ impl From<shaderc::Error> for RenderError {
+     fn from(err: shaderc::Error) -> Self { Self::ErrorInitializingShaderCCompiler(err) }
+ }
+ 
++#[cfg(feature = "shaderc")]
+ impl From<(&str, shaderc::Error)> for RenderError {
+     fn from((shader_name, err): (&str, shaderc::Error)) -> Self {
+         Self::ShaderShaderCError(shader_name.into(), err)
+diff --git a/voxygen/src/render/pipelines/lod_terrain.rs b/voxygen/src/render/pipelines/lod_terrain.rs
+index 6650b68..64bb454 100644
+--- a/voxygen/src/render/pipelines/lod_terrain.rs
++++ b/voxygen/src/render/pipelines/lod_terrain.rs
+@@ -155,15 +155,24 @@ impl LodData {
+                 view_formats: &[],
+             };
+ 
++            let address_mode = if cfg!(target_arch = "wasm32") {
++                wgpu::AddressMode::ClampToEdge
++            } else {
++                wgpu::AddressMode::ClampToBorder
++            };
+             let sampler_info = wgpu::SamplerDescriptor {
+                 label: None,
+-                address_mode_u: wgpu::AddressMode::ClampToBorder,
+-                address_mode_v: wgpu::AddressMode::ClampToBorder,
+-                address_mode_w: wgpu::AddressMode::ClampToBorder,
++                address_mode_u: address_mode,
++                address_mode_v: address_mode,
++                address_mode_w: address_mode,
+                 mag_filter: wgpu::FilterMode::Linear,
+                 min_filter: wgpu::FilterMode::Linear,
+                 mipmap_filter: wgpu::FilterMode::Nearest,
+-                border_color: Some(wgpu::SamplerBorderColor::TransparentBlack),
++                border_color: if cfg!(target_arch = "wasm32") {
++                    None
++                } else {
++                    Some(wgpu::SamplerBorderColor::TransparentBlack)
++                },
+                 ..Default::default()
+             };
+ 
+diff --git a/voxygen/src/render/pipelines/ui.rs b/voxygen/src/render/pipelines/ui.rs
+index 0af0786..da2db08 100644
+--- a/voxygen/src/render/pipelines/ui.rs
++++ b/voxygen/src/render/pipelines/ui.rs
+@@ -292,7 +292,7 @@ impl UiPipeline {
+                 topology: wgpu::PrimitiveTopology::TriangleList,
+                 strip_index_format: None,
+                 front_face: wgpu::FrontFace::Ccw,
+-                cull_mode: Some(wgpu::Face::Back),
++                cull_mode: if cfg!(target_arch = "wasm32") { None } else { Some(wgpu::Face::Back) },
+                 unclipped_depth: false,
+                 polygon_mode: wgpu::PolygonMode::Fill,
+                 conservative: false,
+diff --git a/voxygen/src/render/renderer/compiler.rs b/voxygen/src/render/renderer/compiler.rs
+index 0f7881d..5daaf35 100644
+--- a/voxygen/src/render/renderer/compiler.rs
++++ b/voxygen/src/render/renderer/compiler.rs
+@@ -1,4 +1,5 @@
+ use common_base::prof_span;
++#[cfg(feature = "shaderc")]
+ use tracing::info;
+ 
+ use crate::render::RenderError;
+@@ -17,6 +18,7 @@ impl From<ShaderStage> for wgpu::naga::ShaderStage {
+     }
+ }
+ 
++#[cfg(feature = "shaderc")]
+ impl From<ShaderStage> for shaderc::ShaderKind {
+     fn from(value: ShaderStage) -> Self {
+         match value {
+@@ -36,11 +38,13 @@ pub(super) trait Compiler {
+     ) -> Result<wgpu::ShaderModule, RenderError>;
+ }
+ 
++#[cfg(feature = "shaderc")]
+ pub(super) struct ShaderCCompiler {
+     compiler: shaderc::Compiler,
+     options: shaderc::CompileOptions<'static>,
+ }
+ 
++#[cfg(feature = "shaderc")]
+ impl ShaderCCompiler {
+     pub(super) fn new(
+         optimize: bool,
+@@ -69,6 +73,7 @@ impl ShaderCCompiler {
+     }
+ }
+ 
++#[cfg(feature = "shaderc")]
+ impl Compiler for ShaderCCompiler {
+     fn create_shader_module(
+         &mut self,
+@@ -144,6 +149,7 @@ impl Compiler for WgpuCompiler {
+ 
+         let label = name;
+ 
++        #[cfg(not(target_arch = "wasm32"))]
+         device.push_error_scope(wgpu::ErrorFilter::Validation);
+ 
+         // replace all `includes` recursivly
+@@ -159,10 +165,31 @@ impl Compiler for WgpuCompiler {
+             }
+         };
+ 
++        // naga's WGSL backend cannot emit `isinf`; emulate it. The threshold must
++        // stay <= f32::MAX (3.4e38) or the WGSL literal overflows.
++        let source: Cow<'_, str> = {
++            let define = "#define isinf(x) (abs(x) > 3.4e38)\n";
++            match source.find("#version") {
++                Some(vpos) => {
++                    let line_end = source[vpos..]
++                        .find('\n')
++                        .map(|i| vpos + i + 1)
++                        .unwrap_or(source.len());
++                    Cow::Owned(format!(
++                        "{}{}{}",
++                        &source[..line_end],
++                        define,
++                        &source[line_end..]
++                    ))
++                },
++                None => Cow::Owned(format!("{define}{source}")),
++            }
++        };
++
+         let descriptor = wgpu::ShaderModuleDescriptor {
+             label: Some(label),
+             source: wgpu::ShaderSource::Glsl {
+-                shader: Cow::Borrowed(source),
++                shader: Cow::Owned(source.into_owned()),
+                 stage: stage.into(),
+                 defines: &[],
+             },
+@@ -171,12 +198,17 @@ impl Compiler for WgpuCompiler {
+         #[expect(unsafe_code)]
+         let shader = unsafe { device.create_shader_module_trusted(descriptor, runtimechecks) };
+ 
+-        let rt = tokio::runtime::Runtime::new().unwrap();
++        #[cfg(not(target_arch = "wasm32"))]
++        {
++            let rt = tokio::runtime::Runtime::new().unwrap();
+ 
+-        if let Some(error) = rt.block_on(device.pop_error_scope()) {
+-            Err(RenderError::ShaderWgpuError(label.to_owned(), error))
+-        } else {
+-            Ok(shader)
++            if let Some(error) = rt.block_on(device.pop_error_scope()) {
++                Err(RenderError::ShaderWgpuError(label.to_owned(), error))
++            } else {
++                Ok(shader)
++            }
+         }
++        #[cfg(target_arch = "wasm32")]
++        Ok(shader)
+     }
+ }
+diff --git a/voxygen/src/render/renderer/drawer.rs b/voxygen/src/render/renderer/drawer.rs
+index d34a57a..395d46c 100644
+--- a/voxygen/src/render/renderer/drawer.rs
++++ b/voxygen/src/render/renderer/drawer.rs
+@@ -45,8 +45,8 @@ impl Pipelines<'_> {
+ 
+     fn premultiply_alpha(&self) -> Option<&ui::PremultiplyAlphaPipeline> {
+         match self {
+-            Pipelines::Interface(pipelines) => Some(&pipelines.premultiply_alpha),
+-            Pipelines::All(pipelines) => Some(&pipelines.premultiply_alpha),
++            Pipelines::Interface(pipelines) => pipelines.premultiply_alpha.as_ref(),
++            Pipelines::All(pipelines) => pipelines.premultiply_alpha.as_ref(),
+             Pipelines::None => None,
+         }
+     }
+diff --git a/voxygen/src/render/renderer/mod.rs b/voxygen/src/render/renderer/mod.rs
+index 8f7d53c..dcc4082 100644
+--- a/voxygen/src/render/renderer/mod.rs
++++ b/voxygen/src/render/renderer/mod.rs
+@@ -195,10 +195,26 @@ pub struct Renderer {
+ impl Renderer {
+     /// Create a new `Renderer` from a variety of backend-specific components
+     /// and the window targets.
++    #[cfg(not(target_arch = "wasm32"))]
+     pub fn new(
+         window: Arc<winit::window::Window>,
+         mode: RenderMode,
+         runtime: &tokio::runtime::Runtime,
++    ) -> Result<Self, RenderError> {
++        runtime.block_on(Self::new_inner(window, mode))
++    }
++
++    #[cfg(target_arch = "wasm32")]
++    pub async fn new(
++        window: Arc<winit::window::Window>,
++        mode: RenderMode,
++    ) -> Result<Self, RenderError> {
++        Self::new_inner(window, mode).await
++    }
++
++    async fn new_inner(
++        window: Arc<winit::window::Window>,
++        mode: RenderMode,
+     ) -> Result<Self, RenderError> {
+         let (mut pipeline_modes, mut other_modes) = mode.split();
+         pipeline_modes.remove_unsupported();
+@@ -209,6 +225,7 @@ impl Renderer {
+         // Note that since we only have to enable this once globally, there is no point
+         // in doing this on rerender.
+         // Self::enable_seamless_cube_maps(&mut device);
++        #[cfg(not(target_arch = "wasm32"))]
+         let backends = std::env::var("WGPU_BACKEND")
+             .ok()
+             .and_then(|backend| match backend.to_lowercase().as_str() {
+@@ -222,6 +239,8 @@ impl Renderer {
+                 _ => None,
+             })
+             .unwrap_or(wgpu::Backends::PRIMARY | wgpu::Backends::SECONDARY);
++        #[cfg(target_arch = "wasm32")]
++        let backends = wgpu::Backends::BROWSER_WEBGPU;
+ 
+         let instance = wgpu::Instance::new(&wgpu::InstanceDescriptor {
+             backends,
+@@ -231,14 +250,32 @@ impl Renderer {
+             memory_budget_thresholds: wgpu::MemoryBudgetThresholds::default(),
+         });
+ 
++        #[cfg(not(target_arch = "wasm32"))]
+         let dims = window.inner_size();
++        #[cfg(target_arch = "wasm32")]
++        let dims = {
++            let win = web_sys::window().unwrap();
++            let w = win
++                .inner_width()
++                .ok()
++                .and_then(|v| v.as_f64())
++                .unwrap_or(800.0) as u32;
++            let h = win
++                .inner_height()
++                .ok()
++                .and_then(|v| v.as_f64())
++                .unwrap_or(600.0) as u32;
++            winit::dpi::PhysicalSize::new(w.max(1), h.max(1))
++        };
+ 
+         let surface = instance
+             .create_surface(window)
+             .expect("Failed to create a surface");
+ 
++        #[cfg(not(target_arch = "wasm32"))]
+         let adapters = instance.enumerate_adapters(backends);
+ 
++        #[cfg(not(target_arch = "wasm32"))]
+         for (i, adapter) in adapters.iter().enumerate() {
+             let info = adapter.get_info();
+             let supported_limits = adapter.limits();
+@@ -253,6 +290,7 @@ impl Renderer {
+             );
+         }
+ 
++        #[cfg(not(target_arch = "wasm32"))]
+         let adapter = match std::env::var("WGPU_ADAPTER").ok() {
+             Some(filter) if !filter.is_empty() => adapters
+                 .into_iter()
+@@ -266,13 +304,23 @@ impl Renderer {
+                 })
+                 .ok_or(RenderError::CouldNotFindAdapter)?,
+             Some(_) | None => {
+-                runtime.block_on(instance.request_adapter(&wgpu::RequestAdapterOptionsBase {
+-                    power_preference: wgpu::PowerPreference::HighPerformance,
+-                    compatible_surface: Some(&surface),
+-                    force_fallback_adapter: false,
+-                }))?
++                instance
++                    .request_adapter(&wgpu::RequestAdapterOptionsBase {
++                        power_preference: wgpu::PowerPreference::HighPerformance,
++                        compatible_surface: Some(&surface),
++                        force_fallback_adapter: false,
++                    })
++                    .await?
+             },
+         };
++        #[cfg(target_arch = "wasm32")]
++        let adapter = instance
++            .request_adapter(&wgpu::RequestAdapterOptionsBase {
++                power_preference: wgpu::PowerPreference::HighPerformance,
++                compatible_surface: Some(&surface),
++                force_fallback_adapter: false,
++            })
++            .await?;
+ 
+         let info = adapter.get_info();
+         let supported_limits = adapter.limits();
+@@ -323,8 +371,8 @@ impl Renderer {
+             wgpu::Trace::Off
+         };
+ 
+-        let (device, queue) =
+-            runtime.block_on(adapter.request_device(&wgpu::DeviceDescriptor {
++        let (device, queue) = adapter
++            .request_device(&wgpu::DeviceDescriptor {
+                 // TODO
+                 label: None,
+                 required_features: wgpu::Features::DEPTH_CLIP_CONTROL
+@@ -342,7 +390,8 @@ impl Renderer {
+                 experimental_features: wgpu::ExperimentalFeatures::disabled(),
+                 memory_hints: wgpu::MemoryHints::Performance,
+                 trace: wgpu::Trace::Off,
+-            }))?;
++            })
++            .await?;
+ 
+         // Set error handler for wgpu errors
+         // This is better for use than their default because it includes the error in
+diff --git a/voxygen/src/render/renderer/pipeline_creation.rs b/voxygen/src/render/renderer/pipeline_creation.rs
+index 801b78c..d9e8ec3 100644
+--- a/voxygen/src/render/renderer/pipeline_creation.rs
++++ b/voxygen/src/render/renderer/pipeline_creation.rs
+@@ -1,11 +1,10 @@
+-use crate::render::{
+-    pipelines::rain_occlusion,
+-    renderer::compiler::{ShaderCCompiler, ShaderStage, WgpuCompiler},
+-};
++use crate::render::{pipelines::rain_occlusion, renderer::compiler::{ShaderStage, WgpuCompiler}};
++#[cfg(feature = "shaderc")]
++use crate::render::renderer::compiler::ShaderCCompiler;
+ 
+ use super::{
+     super::{
+-        AaMode, BloomMode, CloudMode, ExperimentalShader, FluidMode, LightingMode, PipelineModes,
++        AaMode, BloomMode, CloudMode, FluidMode, LightingMode, PipelineModes,
+         ReflectionMode, RenderError, ShadowMode,
+         pipelines::{
+             blit, bloom, clouds, debug, figure, fluid, lod_object, lod_terrain, particle,
+@@ -37,7 +36,7 @@ pub struct Pipelines {
+     pub lod_object: lod_object::LodObjectPipeline,
+     pub terrain: terrain::TerrainPipeline,
+     pub ui: ui::UiPipeline,
+-    pub premultiply_alpha: ui::PremultiplyAlphaPipeline,
++    pub premultiply_alpha: Option<ui::PremultiplyAlphaPipeline>,
+     pub blit: blit::BlitPipeline,
+ }
+ 
+@@ -85,7 +84,7 @@ pub struct IngameAndShadowPipelines {
+ /// Use to decouple interface pipeline creation when initializing the renderer
+ pub struct InterfacePipelines {
+     pub ui: ui::UiPipeline,
+-    pub premultiply_alpha: ui::PremultiplyAlphaPipeline,
++    pub premultiply_alpha: Option<ui::PremultiplyAlphaPipeline>,
+     pub blit: blit::BlitPipeline,
+ }
+ 
+@@ -159,6 +158,16 @@ struct ShaderModules {
+     rain_occlusion_figure_vert: wgpu::ShaderModule,
+ }
+ 
++#[cfg(target_arch = "wasm32")]
++fn dummy_shader(device: &wgpu::Device) -> wgpu::ShaderModule {
++    device.create_shader_module(wgpu::ShaderModuleDescriptor {
++        label: Some("dummy shader (push constants unavailable on wasm)"),
++        source: wgpu::ShaderSource::Wgsl(
++            "@vertex fn main() -> @builtin(position) vec4<f32> { return vec4<f32>(0.0); }".into(),
++        ),
++    })
++}
++
+ impl ShaderModules {
+     pub fn new(
+         device: &wgpu::Device,
+@@ -286,6 +295,7 @@ impl ShaderModules {
+             })
+             .unwrap();
+ 
++        #[cfg(feature = "shaderc")]
+         let shaderc_opts = !pipeline_modes
+             .experimental_shaders
+             .contains(&ExperimentalShader::DisableShadercOptimization);
+@@ -313,11 +323,17 @@ impl ShaderModules {
+             })
+         };
+ 
++        #[cfg(feature = "shaderc")]
+         let mut compiler: Box<dyn super::compiler::Compiler> = if pipeline_modes.enable_naga {
+             Box::new(WgpuCompiler::new(fetch_include)?)
+         } else {
+             Box::new(ShaderCCompiler::new(shaderc_opts, fetch_include)?)
+         };
++        #[cfg(not(feature = "shaderc"))]
++        let mut compiler: Box<dyn super::compiler::Compiler> = {
++            let _ = pipeline_modes;
++            Box::new(WgpuCompiler::new(fetch_include)?)
++        };
+ 
+         let mut create_shader = move |name, stage| {
+             tracing::info!("Compiling {name}");
+@@ -334,6 +350,16 @@ impl ShaderModules {
+         }]
+         .concat();
+ 
++        #[cfg(not(target_arch = "wasm32"))]
++        let premultiply_alpha_vert = create_shader("premultiply-alpha-vert", ShaderStage::Vertex)?;
++        #[cfg(target_arch = "wasm32")]
++        let premultiply_alpha_vert = dummy_shader(device);
++        #[cfg(not(target_arch = "wasm32"))]
++        let point_light_shadows_vert =
++            create_shader("point-light-shadows-vert", ShaderStage::Vertex)?;
++        #[cfg(target_arch = "wasm32")]
++        let point_light_shadows_vert = dummy_shader(device);
++
+         Ok(Self {
+             skybox_vert: create_shader("skybox-vert", ShaderStage::Vertex)?,
+             skybox_frag: create_shader("skybox-frag", ShaderStage::Fragment)?,
+@@ -357,7 +383,7 @@ impl ShaderModules {
+             trail_frag: create_shader("trail-frag", ShaderStage::Fragment)?,
+             ui_vert: create_shader("ui-vert", ShaderStage::Vertex)?,
+             ui_frag: create_shader("ui-frag", ShaderStage::Fragment)?,
+-            premultiply_alpha_vert: create_shader("premultiply-alpha-vert", ShaderStage::Vertex)?,
++            premultiply_alpha_vert,
+             premultiply_alpha_frag: create_shader("premultiply-alpha-frag", ShaderStage::Fragment)?,
+             lod_terrain_vert: create_shader("lod-terrain-vert", ShaderStage::Vertex)?,
+             lod_terrain_frag: create_shader("lod-terrain-frag", ShaderStage::Fragment)?,
+@@ -373,10 +399,7 @@ impl ShaderModules {
+             postprocess_frag: create_shader("postprocess-frag", ShaderStage::Fragment)?,
+             blit_vert: create_shader("blit-vert", ShaderStage::Vertex)?,
+             blit_frag: create_shader("blit-frag", ShaderStage::Fragment)?,
+-            point_light_shadows_vert: create_shader(
+-                "point-light-shadows-vert",
+-                ShaderStage::Vertex,
+-            )?,
++            point_light_shadows_vert,
+             light_shadows_directed_vert: create_shader(
+                 "light-shadows-directed-vert",
+                 ShaderStage::Vertex,
+@@ -446,13 +469,21 @@ impl<'a> ParallelTasks<'a> {
+     }
+ 
+     /// Run registered tasks.
+-    fn run(self, needs: PipelineNeeds, pool: &rayon::ThreadPool) {
++    fn run(self, needs: PipelineNeeds, pool: Option<&rayon::ThreadPool>) {
+         prof_span!(_guard, "ParallelTasks::run");
+-        pool.scope(|scope| {
+-            for task in self.tasks {
+-                scope.spawn(|_| task(&needs));
+-            }
+-        });
++        match pool {
++            #[cfg(not(target_arch = "wasm32"))]
++            Some(pool) => pool.scope(|scope| {
++                for task in self.tasks {
++                    scope.spawn(|_| task(&needs));
++                }
++            }),
++            _ => {
++                for task in self.tasks {
++                    task(&needs);
++                }
++            },
++        }
+     }
+ }
+ 
+@@ -489,12 +520,20 @@ fn register_create_interface_pipelines(
+ 
+     let premultiply_alpha = tasks.register(
+         |needs| {
+-            ui::PremultiplyAlphaPipeline::new(
+-                needs.device,
+-                &needs.shaders.premultiply_alpha_vert,
+-                &needs.shaders.premultiply_alpha_frag,
+-                &needs.layouts.premultiply_alpha,
+-            )
++            #[cfg(not(target_arch = "wasm32"))]
++            {
++                Some(ui::PremultiplyAlphaPipeline::new(
++                    needs.device,
++                    &needs.shaders.premultiply_alpha_vert,
++                    &needs.shaders.premultiply_alpha_frag,
++                    &needs.layouts.premultiply_alpha,
++                ))
++            }
++            #[cfg(target_arch = "wasm32")]
++            {
++                let _ = needs;
++                None::<ui::PremultiplyAlphaPipeline>
++            }
+         },
+         "premultiply alpha pipeline creation",
+     );
+@@ -767,13 +806,21 @@ fn register_create_ingame_and_shadow_pipelines(
+     // Pipeline for rendering point light terrain shadow maps.
+     let point_shadow = tasks.register(
+         move |needs| {
+-            shadow::PointShadowPipeline::new(
+-                needs.device,
+-                &needs.shaders.point_light_shadows_vert,
+-                &needs.layouts.global,
+-                &needs.layouts.terrain,
+-                needs.pipeline_modes.aa,
+-            )
++            #[cfg(not(target_arch = "wasm32"))]
++            {
++                Some(shadow::PointShadowPipeline::new(
++                    needs.device,
++                    &needs.shaders.point_light_shadows_vert,
++                    &needs.layouts.global,
++                    &needs.layouts.terrain,
++                    needs.pipeline_modes.aa,
++                ))
++            }
++            #[cfg(target_arch = "wasm32")]
++            {
++                let _ = needs;
++                None::<shadow::PointShadowPipeline>
++            }
+         },
+         "point shadow pipeline creation",
+     );
+@@ -865,7 +912,7 @@ fn register_create_ingame_and_shadow_pipelines(
+         // tasks to do beforehand (i.e. implement it as skipping registering them above).
+         // TODO: Skip creating these if the shadow map setting is not enabled.
+         shadow: ShadowPipelines {
+-            point: Some(point_shadow.resolve()),
++            point: point_shadow.resolve(),
+             directed: Some(terrain_directed_shadow.resolve()),
+             figure: Some(figure_directed_shadow.resolve()),
+             debug: Some(debug_directed_shadow.resolve()),
+@@ -903,8 +950,10 @@ pub(super) fn initial_create_pipelines(
+     // Process shaders into modules
+     let shader_modules = ShaderModules::new(&device, &shaders, &pipeline_modes, has_shadow_views)?;
+ 
++    #[cfg(not(target_arch = "wasm32"))]
+     let is_opengl = matches!(backend, wgpu::Backend::Gl);
+     // Create threadpool for parallel portion
++    #[cfg(not(target_arch = "wasm32"))]
+     let pool = rayon::ThreadPoolBuilder::new()
+         .thread_name(|n| format!("pipeline-creation-{}", n))
+         // Use a single thread for opengl because the pipeline creation is serialized by a lock in
+@@ -931,23 +980,29 @@ pub(super) fn initial_create_pipelines(
+         let dummy_progress = Progress::new();
+         let mut tasks = ParallelTasks::new(&dummy_progress);
+         let interface_pipelines = register_create_interface_pipelines(&mut tasks);
+-        tasks.run(needs, &pool);
++        #[cfg(not(target_arch = "wasm32"))]
++        tasks.run(needs, Some(&pool));
++        #[cfg(target_arch = "wasm32")]
++        tasks.run(needs, None);
+         interface_pipelines()
+     };
+ 
++    #[cfg(not(target_arch = "wasm32"))]
+     let pool = Arc::new(pool);
++    #[cfg(not(target_arch = "wasm32"))]
+     let send_pool = Arc::clone(&pool);
+     // Track pipeline creation progress
+     let progress = Arc::new(Progress::new());
++    #[cfg(not(target_arch = "wasm32"))]
+     let (pipeline_send, pipeline_recv) = crossbeam_channel::bounded(0);
++    #[cfg(target_arch = "wasm32")]
++    let (pipeline_send, pipeline_recv) = crossbeam_channel::bounded(1);
+     let pipeline_creation = PipelineCreation {
+         progress: Arc::clone(&progress),
+         recv: pipeline_recv,
+     };
+-    // Start background compilation
+-    pool.spawn(move || {
+-        let pool = &*send_pool;
+ 
++    let run_pipelines = move |pool: Option<&rayon::ThreadPool>| {
+         let needs = PipelineNeeds {
+             device: &device,
+             layouts: &layouts,
+@@ -965,7 +1020,15 @@ pub(super) fn initial_create_pipelines(
+         };
+ 
+         pipeline_send.send(pipelines).expect("Channel disconnected");
+-    });
++    };
++
++    #[cfg(not(target_arch = "wasm32"))]
++    pool.spawn(move || run_pipelines(Some(&send_pool)));
++    #[cfg(target_arch = "wasm32")]
++    {
++        let _ = backend;
++        run_pipelines(None);
++    }
+ 
+     Ok((interface_pipelines, pipeline_creation))
+ }
+@@ -996,27 +1059,18 @@ pub(super) fn recreate_pipelines(
+ > {
+     prof_span!(_guard, "recreate_pipelines");
+ 
+-    let is_opengl = matches!(backend, wgpu::Backend::Gl);
+-    // Create threadpool for parallel portion
+-    let pool = rayon::ThreadPoolBuilder::new()
+-        .thread_name(|n| format!("pipeline-recreation-{}", n))
+-        // 0 tells rayon to select the number automatically
+-        .num_threads(if is_opengl { 1 } else { 0 })
+-        .build()
+-        .unwrap();
+-    let pool = Arc::new(pool);
+-    let send_pool = Arc::clone(&pool);
+     // Track pipeline creation progress
+     let progress = Arc::new(Progress::new());
++    #[cfg(not(target_arch = "wasm32"))]
+     let (result_send, result_recv) = crossbeam_channel::bounded(0);
++    #[cfg(target_arch = "wasm32")]
++    let (result_send, result_recv) = crossbeam_channel::bounded(1);
+     let pipeline_creation = PipelineCreation {
+         progress: Arc::clone(&progress),
+         recv: result_recv,
+     };
+-    // Start background compilation
+-    pool.spawn(move || {
+-        let pool = &*send_pool;
+ 
++    let run_creation = move |pool: Option<&rayon::ThreadPool>| {
+         // Create tasks upfront so the total counter will be accurate
+         let shader_task = progress.create_task();
+         let mut tasks = ParallelTasks::new(&progress);
+@@ -1073,7 +1127,28 @@ pub(super) fn recreate_pipelines(
+                 layouts.postprocess,
+             )))
+             .expect("Channel disconnected");
+-    });
++    };
++
++    #[cfg(not(target_arch = "wasm32"))]
++    {
++        let is_opengl = matches!(backend, wgpu::Backend::Gl);
++        // Create threadpool for parallel portion
++        let pool = rayon::ThreadPoolBuilder::new()
++            .thread_name(|n| format!("pipeline-recreation-{}", n))
++            // 0 tells rayon to select the number automatically
++            .num_threads(if is_opengl { 1 } else { 0 })
++            .build()
++            .unwrap();
++        let pool = Arc::new(pool);
++        let send_pool = Arc::clone(&pool);
++        // Start background compilation
++        pool.spawn(move || run_creation(Some(&send_pool)));
++    }
++    #[cfg(target_arch = "wasm32")]
++    {
++        let _ = backend;
++        run_creation(None);
++    }
+ 
+     pipeline_creation
+ }
+diff --git a/voxygen/src/render/renderer/shadow_map.rs b/voxygen/src/render/renderer/shadow_map.rs
+index 59862f2..364ffce 100644
+--- a/voxygen/src/render/renderer/shadow_map.rs
++++ b/voxygen/src/render/renderer/shadow_map.rs
+@@ -128,6 +128,7 @@ impl ShadowMap {
+                 occlusion_query_set: None,
+             });
+         };
++        #[cfg(not(target_arch = "wasm32"))]
+         clear(&cube_tex);
+         clear(&tex);
+         #[expect(clippy::drop_non_drop)]
+diff --git a/voxygen/src/scene/terrain/mod.rs b/voxygen/src/scene/terrain/mod.rs
+index bc31134..a723304 100644
+--- a/voxygen/src/scene/terrain/mod.rs
++++ b/voxygen/src/scene/terrain/mod.rs
+@@ -482,7 +482,7 @@ impl SpriteRenderContext {
+             sprite_mesh: Mesh<SpriteVertex>,
+         }
+ 
+-        let join_handle = std::thread::spawn(move || {
++        let mesh_sprites = move || {
+             prof_span!("mesh all sprites");
+             // Load all the sprite config data.
+             let sprite_config =
+@@ -595,23 +595,21 @@ impl SpriteRenderContext {
+                 sprite_atlas_size,
+                 sprite_mesh,
+             }
+-        });
++        };
++
++        #[cfg(not(target_arch = "wasm32"))]
++        let mut join_handle = Some(std::thread::spawn(mesh_sprites));
++        #[cfg(target_arch = "wasm32")]
++        let mut wasm_response = Some(mesh_sprites());
+ 
+         let init = core::cell::OnceCell::new();
+-        let mut join_handle = Some(join_handle);
+         let mut closure = move |renderer: &mut Renderer| {
+             // The second unwrap can only fail if the sprite meshing thread panics, which
+             // implies that our sprite assets either were not found or did not
+             // satisfy the size requirements for meshing, both of which are
+             // considered invariant violations.
+-            let SpriteWorkerResponse {
+-                //sprite_config,
+-                sprite_data,
+-                missing_sprite_placeholder,
+-                sprite_atlas_texture_data,
+-                sprite_atlas_size,
+-                sprite_mesh,
+-            } = join_handle
++            #[cfg(not(target_arch = "wasm32"))]
++            let response = join_handle
+                 .take()
+                 .expect(
+                     "Closure should only be called once (in a `OnceCell::get_or_init`) in the \
+@@ -619,6 +617,19 @@ impl SpriteRenderContext {
+                 )
+                 .join()
+                 .unwrap();
++            #[cfg(target_arch = "wasm32")]
++            let response = wasm_response.take().expect(
++                "Closure should only be called once (in a `OnceCell::get_or_init`) in the \
++                 absence of caught panics!",
++            );
++            let SpriteWorkerResponse {
++                //sprite_config,
++                sprite_data,
++                missing_sprite_placeholder,
++                sprite_atlas_texture_data,
++                sprite_atlas_size,
++                sprite_mesh,
++            } = response;
+ 
+             let [sprite_col_lights] =
+                 sprite_atlas_texture_data.create_textures(renderer, sprite_atlas_size);
+diff --git a/voxygen/src/session/mod.rs b/voxygen/src/session/mod.rs
+index a1bf518..8594da0 100644
+--- a/voxygen/src/session/mod.rs
++++ b/voxygen/src/session/mod.rs
+@@ -6,6 +6,7 @@ use std::{cell::RefCell, collections::HashSet, rc::Rc, result::Result, time::Dur
+ 
+ use itertools::Itertools;
+ #[cfg(not(target_os = "macos"))]
++#[cfg(all(not(target_os = "macos"), not(target_arch = "wasm32")))]
+ use mumble_link::SharedLink;
+ use ordered_float::OrderedFloat;
+ use specs::WorldExt;
+@@ -115,10 +116,10 @@ pub struct SessionState {
+     zoom_lock: bool,
+     is_aiming: bool,
+     pub(crate) target_entity: Option<specs::Entity>,
+-    pub(crate) selected_entity: Option<(specs::Entity, std::time::Instant)>,
++    pub(crate) selected_entity: Option<(specs::Entity, web_time::Instant)>,
+     pub(crate) viewpoint_entity: Option<specs::Entity>,
+     interactables: interactable::Interactables,
+-    #[cfg(not(target_os = "macos"))]
++    #[cfg(all(not(target_os = "macos"), not(target_arch = "wasm32")))]
+     mumble_link: SharedLink,
+     hitboxes: HashMap<specs::Entity, DebugShapeId>,
+     lines: PlayerDebugLines,
+@@ -149,7 +150,7 @@ impl SessionState {
+         client
+             .borrow_mut()
+             .set_lod_distance(global_state.settings.graphics.lod_distance);
+-        #[cfg(not(target_os = "macos"))]
++        #[cfg(all(not(target_os = "macos"), not(target_arch = "wasm32")))]
+         let mut mumble_link = SharedLink::new("veloren", "veloren-voxygen");
+         {
+             let mut client = client.borrow_mut();
+@@ -157,7 +158,7 @@ impl SessionState {
+             client.request_lossy_terrain_compression(
+                 global_state.settings.networking.lossy_terrain_compression,
+             );
+-            #[cfg(not(target_os = "macos"))]
++            #[cfg(all(not(target_os = "macos"), not(target_arch = "wasm32")))]
+             if let Some(uid) = client.uid() {
+                 let identiy = if let Some(info) = client.player_list().get(&uid) {
+                     format!("{}-{}", info.player_alias, uid)
+@@ -193,7 +194,7 @@ impl SessionState {
+             selected_entity: None,
+             viewpoint_entity: None,
+             interactables: Default::default(),
+-            #[cfg(not(target_os = "macos"))]
++            #[cfg(all(not(target_os = "macos"), not(target_arch = "wasm32")))]
+             mumble_link,
+             hitboxes: HashMap::new(),
+             metadata,
+@@ -264,7 +265,7 @@ impl SessionState {
+         self.scene.maintain_debug_vectors(&client, &mut self.lines);
+         let pos = client.position().unwrap_or_default();
+ 
+-        #[cfg(not(target_os = "macos"))]
++        #[cfg(all(not(target_os = "macos"), not(target_arch = "wasm32")))]
+         {
+             // Update mumble positional audio
+             let ori = client
+@@ -1290,7 +1291,7 @@ impl PlayState for SessionState {
+                             GameInput::Select => {
+                                 if !state {
+                                     self.selected_entity =
+-                                        self.target_entity.map(|e| (e, std::time::Instant::now()));
++                                        self.target_entity.map(|e| (e, web_time::Instant::now()));
+                                 }
+                             },
+                             GameInput::AcceptGroupInvite if state => {
+diff --git a/voxygen/src/settings/mod.rs b/voxygen/src/settings/mod.rs
+index 26ff412..aa05eb5 100644
+--- a/voxygen/src/settings/mod.rs
++++ b/voxygen/src/settings/mod.rs
+@@ -1,3 +1,4 @@
++#[cfg(not(target_arch = "wasm32"))]
+ use directories_next::UserDirs;
+ use serde::{Deserialize, Serialize};
+ use std::{
+@@ -55,22 +56,27 @@ pub struct Settings {
+ 
+ impl Default for Settings {
+     fn default() -> Self {
+-        let user_dirs = UserDirs::new().expect("System's $HOME directory path not found!");
++        #[cfg(not(target_arch = "wasm32"))]
++        let screenshots_path = {
++            let user_dirs = UserDirs::new().expect("System's $HOME directory path not found!");
+ 
+-        // Chooses a path to store the screenshots by the following order:
+-        //  - The VOXYGEN_SCREENSHOT environment variable
+-        //  - The user's picture directory
+-        //  - The executable's directory
+-        // This only selects if there isn't already an entry in the settings file
+-        let screenshots_path = std::env::var_os("VOXYGEN_SCREENSHOT")
+-            .map(PathBuf::from)
+-            .or_else(|| user_dirs.picture_dir().map(|dir| dir.join("veloren")))
+-            .or_else(|| {
+-                std::env::current_exe()
+-                    .ok()
+-                    .and_then(|dir| dir.parent().map(PathBuf::from))
+-            })
+-            .expect("Couldn't choose a place to store the screenshots");
++            // Chooses a path to store the screenshots by the following order:
++            //  - The VOXYGEN_SCREENSHOT environment variable
++            //  - The user's picture directory
++            //  - The executable's directory
++            // This only selects if there isn't already an entry in the settings file
++            std::env::var_os("VOXYGEN_SCREENSHOT")
++                .map(PathBuf::from)
++                .or_else(|| user_dirs.picture_dir().map(|dir| dir.join("veloren")))
++                .or_else(|| {
++                    std::env::current_exe()
++                        .ok()
++                        .and_then(|dir| dir.parent().map(PathBuf::from))
++                })
++                .expect("Couldn't choose a place to store the screenshots")
++        };
++        #[cfg(target_arch = "wasm32")]
++        let screenshots_path = PathBuf::from("screenshots");
+ 
+         Settings {
+             chat: ChatSettings::default(),
+diff --git a/voxygen/src/ui/graphic/mod.rs b/voxygen/src/ui/graphic/mod.rs
+index 18faaad..d7886e4 100644
+--- a/voxygen/src/ui/graphic/mod.rs
++++ b/voxygen/src/ui/graphic/mod.rs
+@@ -807,7 +807,11 @@ fn create_image(
+             .border_color
+             // TODO: either use the desktop only border color or just emulate this
+             //.map(|c| c.into_array().into()),
+-            .map(|_| wgpu::AddressMode::ClampToBorder),
++            .map(|_| if cfg!(target_arch = "wasm32") {
++                wgpu::AddressMode::ClampToEdge
++            } else {
++                wgpu::AddressMode::ClampToBorder
++            }),
+     );
+     let mut upload_batch = UiUploadBatchId::default();
+     let aabr = Aabr {
+diff --git a/voxygen/src/ui/ice/widget/tooltip.rs b/voxygen/src/ui/ice/widget/tooltip.rs
+index f771b80..fa6c40a 100644
+--- a/voxygen/src/ui/ice/widget/tooltip.rs
++++ b/voxygen/src/ui/ice/widget/tooltip.rs
+@@ -1,10 +1,11 @@
++use web_time::Instant;
+ use iced::{
+     Clipboard, Element, Event, Hasher, Layout, Length, Point, Rectangle, Size, Widget, layout,
+ };
+ use std::{
+     hash::Hash,
+     sync::Mutex,
+-    time::{Duration, Instant},
++    time::Duration,
+ };
+ use vek::*;
+ 
+diff --git a/voxygen/src/ui/keyed_jobs.rs b/voxygen/src/ui/keyed_jobs.rs
+index c398f3f..7633f78 100644
+--- a/voxygen/src/ui/keyed_jobs.rs
++++ b/voxygen/src/ui/keyed_jobs.rs
+@@ -1,8 +1,9 @@
++use web_time::Instant;
+ use common::slowjob::{SlowJob, SlowJobPool};
+ use hashbrown::{HashMap, hash_map::Entry};
+ use std::{
+     hash::Hash,
+-    time::{Duration, Instant},
++    time::Duration,
+ };
+ 
+ enum KeyedJobTask<V> {
+diff --git a/voxygen/src/ui/widgets/item_tooltip.rs b/voxygen/src/ui/widgets/item_tooltip.rs
+index efe809f..27e1b81 100644
+--- a/voxygen/src/ui/widgets/item_tooltip.rs
++++ b/voxygen/src/ui/widgets/item_tooltip.rs
+@@ -1,3 +1,4 @@
++use web_time::Instant;
+ use super::image_frame::ImageFrame;
+ use crate::hud::{
+     HudInfo, get_quality_col,
+@@ -27,7 +28,7 @@ use i18n::Localization;
+ use lazy_static::lazy_static;
+ use std::{
+     borrow::Borrow,
+-    time::{Duration, Instant},
++    time::Duration,
+ };
+ 
+ #[derive(Copy, Clone)]
+diff --git a/voxygen/src/ui/widgets/tooltip.rs b/voxygen/src/ui/widgets/tooltip.rs
+index 1fa97aa..8f45022 100644
+--- a/voxygen/src/ui/widgets/tooltip.rs
++++ b/voxygen/src/ui/widgets/tooltip.rs
+@@ -4,7 +4,8 @@ use conrod_core::{
+     WidgetStyle, builder_method, builder_methods, image, input::global::Global,
+     position::Dimension, text, widget, widget_ids,
+ };
+-use std::time::{Duration, Instant};
++use std::time::Duration;
++use web_time::Instant;
+ #[derive(Copy, Clone)]
+ struct Hover(widget::Id, [f64; 2]);
+ #[derive(Copy, Clone)]
+diff --git a/voxygen/src/web.rs b/voxygen/src/web.rs
+new file mode 100644
+index 0000000..b92ee3d
+--- /dev/null
++++ b/voxygen/src/web.rs
+@@ -0,0 +1,96 @@
++//! Web (wasm) entry point for the browser build.
++//!
++//! Mirrors `main.rs` but: no CLI, no tokio multi-thread runtime, no audio, no
++//! filesystem — assets are preloaded over HTTP and the window/renderer are
++//! created asynchronously.
++#![cfg(target_arch = "wasm32")]
++
++use crate::{
++    GlobalState,
++    audio::AudioFrontend,
++    profile::Profile,
++    run,
++    scene::terrain::SpriteRenderContext,
++    settings::{Settings, get_fps},
++    window::Window,
++};
++use common::clock::Clock;
++use i18n::LocalizationHandle;
++use std::sync::Arc;
++use wasm_bindgen_futures::spawn_local;
++
++const ASSETS_BASE: &str = "/spikes/vendor/veloren/assets";
++const MANIFEST_URL: &str = "/spikes/voxharness/assets-manifest.txt";
++
++pub fn start() {
++    console_error_panic_hook::set_once();
++    spawn_local(async move {
++        if let Err(e) = run_web().await {
++            web_sys::console::error_1(&format!("voxygen web error: {e}").into());
++        }
++    });
++}
++
++async fn run_web() -> Result<(), String> {
++    let mut settings = Settings::default();
++    client::set_auth_proxy("http://127.0.0.1:9100/auth".to_string());
++    settings.graphics.render_mode.rain_enabled = false;
++    settings.graphics.render_mode.bloom = crate::render::BloomMode::Off;
++    settings.graphics.render_mode.shadow = crate::render::ShadowMode::None;
++    log("web: start");
++
++    let manifest = common::assets::load_manifest(MANIFEST_URL).await?;
++    log(&format!("web: manifest {} files", manifest.len()));
++    let paths: Vec<&str> = manifest.iter().map(String::as_str).collect();
++    common::assets::preload(ASSETS_BASE, &paths, |_, _| {}).await?;
++    log(&format!("web: preloaded {}", paths.len()));
++
++    let audio = AudioFrontend::no_audio();
++    let profile = Profile::default();
++
++    let mut i18n = LocalizationHandle::load_expect(&settings.language.selected_language);
++    i18n.set_english_fallback(settings.language.use_english_fallback);
++    log("web: i18n loaded");
++
++    let (mut window, event_loop) = Window::new(&settings)
++        .await
++        .map_err(|e| format!("{e:?}"))?;
++    log("web: window created");
++
++    let clipboard = crate::ui::ice::Clipboard::connect(window.window());
++    let lazy_init = SpriteRenderContext::new(window.renderer_mut());
++
++    let tokio_runtime = Arc::new(
++        tokio::runtime::Builder::new_current_thread()
++            .build()
++            .map_err(|e| format!("{e:?}"))?,
++    );
++
++    use clap::Parser;
++    let args = crate::cli::Args::parse_from(std::iter::empty::<std::ffi::OsString>());
++
++    let global_state = GlobalState {
++        userdata_dir: std::path::PathBuf::new(),
++        config_dir: std::path::PathBuf::new(),
++        audio,
++        profile,
++        window,
++        tokio_runtime,
++        lazy_init,
++        clock: Clock::new(std::time::Duration::from_secs_f64(
++            1.0 / get_fps(settings.graphics.max_fps) as f64,
++        )),
++        settings,
++        info_message: None,
++        i18n,
++        clipboard,
++        clear_shadows_next_frame: false,
++        args,
++    };
++
++    log("web: entering event loop");
++    run::run(global_state, event_loop).map_err(|e| format!("{e:?}"))?;
++    Ok(())
++}
++
++fn log(msg: &str) { web_sys::console::log_1(&msg.into()); }
+diff --git a/voxygen/src/window.rs b/voxygen/src/window.rs
+index fd70a7c..2031bf2 100644
+--- a/voxygen/src/window.rs
++++ b/voxygen/src/window.rs
+@@ -257,10 +257,60 @@ pub struct Window {
+ }
+ 
+ impl Window {
++    #[cfg(not(target_arch = "wasm32"))]
+     pub fn new(
+         settings: &Settings,
+         runtime: &tokio::runtime::Runtime,
+     ) -> Result<(Window, EventLoop), Error> {
++        let (event_loop, window) = Self::create_window(settings);
++        let renderer = Renderer::new(
++            Arc::clone(&window),
++            settings.graphics.render_mode.clone(),
++            runtime,
++        )?;
++        Self::assemble(settings, window, event_loop, renderer)
++    }
++
++    #[cfg(target_arch = "wasm32")]
++    pub async fn new(settings: &Settings) -> Result<(Window, EventLoop), Error> {
++        let (event_loop, window) = Self::create_window(settings);
++        // winit-web publishes the canvas size via a ResizeObserver callback; wait
++        // for it so the surface isn't configured with a zero size.
++        gloo_timers::future::TimeoutFuture::new(50).await;
++        let renderer =
++            Renderer::new(Arc::clone(&window), settings.graphics.render_mode.clone()).await?;
++        Self::assemble(settings, window, event_loop, renderer)
++    }
++
++    #[cfg(target_arch = "wasm32")]
++    fn create_web_canvas() -> web_sys::HtmlCanvasElement {
++        use wasm_bindgen::JsCast;
++        let win = web_sys::window().unwrap();
++        let doc = win.document().unwrap();
++        let canvas = doc
++            .create_element("canvas")
++            .unwrap()
++            .dyn_into::<web_sys::HtmlCanvasElement>()
++            .unwrap();
++        let w = win
++            .inner_width()
++            .ok()
++            .and_then(|v| v.as_f64())
++            .unwrap_or(800.0) as u32;
++        let h = win
++            .inner_height()
++            .ok()
++            .and_then(|v| v.as_f64())
++            .unwrap_or(600.0) as u32;
++        canvas.set_width(w);
++        canvas.set_height(h);
++        if let Some(body) = doc.body() {
++            let _ = body.append_child(&canvas);
++        }
++        canvas
++    }
++
++    fn create_window(settings: &Settings) -> (EventLoop, Arc<winit::window::Window>) {
+         let event_loop = EventLoop::new().unwrap();
+ 
+         let window = settings.graphics.window;
+@@ -274,7 +324,10 @@ impl Window {
+             ))
+             .with_maximized(window.maximised);
+ 
+-        #[cfg(not(any(target_os = "windows", target_os = "macos")))]
++        #[cfg(all(
++            not(any(target_os = "windows", target_os = "macos")),
++            not(target_arch = "wasm32")
++        ))]
+         {
+             use winit::platform::wayland::WindowAttributesExtWayland;
+             attributes = attributes.with_name("net.veloren.veloren", "veloren");
+@@ -290,12 +343,42 @@ impl Window {
+         #[expect(deprecated)]
+         let window = Arc::new(event_loop.create_window(attributes).unwrap());
+ 
+-        let renderer = Renderer::new(
+-            Arc::clone(&window),
+-            settings.graphics.render_mode.clone(),
+-            runtime,
+-        )?;
++        #[cfg(target_arch = "wasm32")]
++        {
++            use winit::platform::web::WindowExtWebSys;
++            if let Some(canvas) = window.canvas() {
++                let win = web_sys::window().unwrap();
++                let w = win
++                    .inner_width()
++                    .ok()
++                    .and_then(|v| v.as_f64())
++                    .unwrap_or(800.0) as u32;
++                let h = win
++                    .inner_height()
++                    .ok()
++                    .and_then(|v| v.as_f64())
++                    .unwrap_or(600.0) as u32;
++                canvas.set_width(w);
++                canvas.set_height(h);
++                let _ = canvas.style().set_property("width", &format!("{w}px"));
++                let _ = canvas.style().set_property("height", &format!("{h}px"));
++                if let Some(body) = win.document().and_then(|d| d.body()) {
++                    if !body.contains(Some(&canvas)) {
++                        let _ = body.append_child(&canvas);
++                    }
++                }
++            }
++        }
++
++        (event_loop, window)
++    }
+ 
++    fn assemble(
++        settings: &Settings,
++        window: Arc<winit::window::Window>,
++        event_loop: EventLoop,
++        renderer: Renderer,
++    ) -> Result<(Window, EventLoop), Error> {
+         let keypress_map = HashMap::new();
+ 
+         let gilrs = match Gilrs::new() {

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>PoC-3: wasm assets</title>
+  <style>
+    body { margin: 0; background: #101014; color: #ddd; font: 14px system-ui, sans-serif; }
+    .wrap { width: 420px; margin: 80px auto; }
+    .track { height: 12px; background: #222; border-radius: 6px; overflow: hidden; }
+    #bar { height: 100%; width: 0; background: #6cf; transition: width .1s; }
+    #txt { display: block; margin-top: 8px; text-align: right; opacity: .8; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h3>PoC-3 — assets wasm (fetch + Cache Storage)</h3>
+    <div class="track"><div id="bar"></div></div>
+    <span id="txt">0/0</span>
+  </div>
+  <script type="module">
+    document.title = 'MODULE_RAN';
+    import init from './pkg/poc3_assets_wasm.js?v=2';
+    try {
+      await init('./pkg/poc3_assets_wasm_bg.wasm?v=2');
+      document.title = 'INIT_DONE';
+    } catch (e) {
+      document.title = 'INIT_ERROR';
+      throw e;
+    }
+  </script>
+</body>
+</html>
